@@ -18,6 +18,22 @@ This is an example text.  Now for some Emacs Lisp:
       (message "This"))))
 #+end_src
 
+* Folie mit Java
+
+#+begin_src java
+package de.activegroup;
+
+import java.time.LocalDate;
+import java.time.Month;
+
+public class Main {
+    public static void main(String[] args) {
+
+        System.out.println(Contract.denotation(Contract.ContractExamples.dragon,
+                LocalDate.of(2024, Month.OCTOBER, 14)));
+    }
+}
+#+end_src
 * A slide with LaTeX
 
 We can even write fancy math symbols and stuff.  Like
