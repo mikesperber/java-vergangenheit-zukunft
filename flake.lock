@@ -1,0 +1,146 @@
+{
+  "nodes": {
+    "decktape": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1723823382,
+        "narHash": "sha256-V7JoYtwP7iQYFi/WhFpkELs7mNKF6CqrMyjWhxLkcTA=",
+        "owner": "astefanutti",
+        "repo": "decktape",
+        "rev": "0e0a75bcf05960e5d7ecf74313755c251134fe0f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "astefanutti",
+        "repo": "decktape",
+        "type": "github"
+      }
+    },
+    "flake-utils": {
+      "inputs": {
+        "systems": "systems"
+      },
+      "locked": {
+        "lastModified": 1726560853,
+        "narHash": "sha256-X6rJYSESBVr3hBoH0WbKE5KvhPU5bloyZ2L4K60/fPQ=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "c1dfcf08411b08f6b8615f7d8971a2bfa81d5e8a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "mathjax": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1688841413,
+        "narHash": "sha256-y9DyQqgVsPsIpi1U5D6lmLnIQfpDviqsobBhTqhGh9I=",
+        "owner": "mathjax",
+        "repo": "mathjax",
+        "rev": "b6922e564070d20888f680a289381702a266718f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mathjax",
+        "repo": "mathjax",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1728538411,
+        "narHash": "sha256-f0SBJz1eZ2yOuKUr5CA9BHULGXVSn6miBuUWdTyhUhU=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "b69de56fac8c2b6f8fd27f2eca01dcda8e0a4221",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "plantumlC4": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1728200304,
+        "narHash": "sha256-92t4mqVKTeLRafcnYnD+2XHeFqTatRRYT0jcoHRmWGE=",
+        "owner": "plantuml-stdlib",
+        "repo": "c4-plantuml",
+        "rev": "e236295d16467e3e78d2aebe6cdbdc32a961ac86",
+        "type": "github"
+      },
+      "original": {
+        "owner": "plantuml-stdlib",
+        "repo": "c4-plantuml",
+        "type": "github"
+      }
+    },
+    "plantumlEIP": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1661106976,
+        "narHash": "sha256-LgTDs0uPvnFGAfM0mKiDskfmc7v/GbSyiLlJaWQSMjs=",
+        "owner": "plantuml-stdlib",
+        "repo": "EIP-PlantUML",
+        "rev": "22dcb7d5f755b5140f4c32999b4d7d8a8e9973a3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "plantuml-stdlib",
+        "repo": "EIP-PlantUML",
+        "type": "github"
+      }
+    },
+    "revealjs": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1728651520,
+        "narHash": "sha256-Wfeos/CQa4iyd3nWkJR+qDV0r4Ju3mLEVZeJQELm7wQ=",
+        "owner": "hakimel",
+        "repo": "reveal.js",
+        "rev": "8d7b03c886e1f611b1ed69a5f12a7143f83f42a8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hakimel",
+        "repo": "reveal.js",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "decktape": "decktape",
+        "flake-utils": "flake-utils",
+        "mathjax": "mathjax",
+        "nixpkgs": "nixpkgs",
+        "plantumlC4": "plantumlC4",
+        "plantumlEIP": "plantumlEIP",
+        "revealjs": "revealjs"
+      }
+    },
+    "systems": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
