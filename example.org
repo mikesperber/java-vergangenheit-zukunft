@@ -1,43 +1,90 @@
-#+title: FIXME
-#+author: Foo Bar
+#+title: Hätte, hätte Fahrradkette
+#+author: Falk Sippach, Mike Sperber
 #+REVEAL_PLUGINS: (notes)
 #+REVEAL_THEME: ./css/themes/active.css
-#+REVEAL_HLEVEL: 100
+#+REVEAL_HLEVEL: 1
 #+REVEAL_TRANS: none
 #+OPTIONS: toc:nil reveal-center:f H:4
 
-* First slide
+* Falk Sippach
 
-This is an example text.  Now for some Emacs Lisp:
+Softwarearchitekt bei embarc
+Organisator von ...
 
-#+begin_src elisp
-(defun my-first-function (foo bar)
-  "I'm the documentation."
-  (let ((this 'that))
-    (when this
-      (message "This"))))
-#+end_src
 
-* Folie mit Java
+* Mike Sperber
+
+Geschäftsführer bei active group
+...
+
+* Hätte, hätte Fahrradkette
+
+Warum sind wir hier?
+
+
+* Generics
 
 #+begin_src java
-package de.activegroup;
-
-import java.time.LocalDate;
-import java.time.Month;
-
-public class Main {
-    public static void main(String[] args) {
-
-        System.out.println(Contract.denotation(Contract.ContractExamples.dragon,
-                LocalDate.of(2024, Month.OCTOBER, 14)));
-    }
-}
 #+end_src
-* A slide with LaTeX
 
-We can even write fancy math symbols and stuff.  Like
-$\int_{i=0}^\infty f \mathrm{d}\lambda$.
+* Stream API
+
+#+begin_src java
+list.stream().map().toList();
+#+end_src
+
+** subslide
+
+* Lambdas
+
+* Optional
+
+* Modulsystem
+
+* List.of() (unmodifiable)
+
+* Local variable type inference
+
+* switch expressions
+
+* Records
+
+* Type Patterns
+
+* Sealed Classes
+
+* Pattern-Matching in switch
+
+* virtual threads
+
+* structured concurrency
+
+* record patterns
+
+* scoped values
+
+* string templates (inzwischen wieder abgeschafft)
+
+* sequenced collections
+
+* unnamed patterns, variables
+
+* statements before super
+
+* stream gatherers
+
+* implicitly declared classes, instance main methods
+
+* primitive types in patterns
+
+* flexible constructor bodies (cf. statements before super)
+
+* module import
+
+* value types
+
+* nullable types
+
 
 * Diagrams!
 
@@ -70,27 +117,5 @@ Rel(client, server, "talks to")
 @enduml
 #+end_src
 
-* Haskell
-
-As an example for a language where the syntax highlighting doesn't
-work out of the box, here's some Haskell code.
-
-#+begin_src haskell
-type Weight = Integer
-type Sentence = String
-
--- | Animals may be either dead or alive.
-data Liveness = Alive | Dead
-
--- | An animal is one of the following:
--- - an armadillo -OR-
--- - a parrot
-data Animal
-  = Dillo { dilloLiveness :: Liveness, dilloWeight :: Weight }
-  | Parrot Sentence Weight
-
-dillo = Dillo Alive 123
-
-runOverAnimal :: Animal -> Animal
-runOverAnimal = undefined
-#+end_src
+* Vielen Dank
+Fragen
