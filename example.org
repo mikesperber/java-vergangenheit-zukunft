@@ -27,6 +27,10 @@ Warum sind wir hier?
 #+begin_src java
 #+end_src
 
+* Strachey
+
+[[file:images/parametric-polymorphism.png]]
+
 * Stream API
 
 #+begin_src java
