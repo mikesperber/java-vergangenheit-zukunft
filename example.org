@@ -43,6 +43,22 @@ list.stream().map().toList();
 
 * Optional
 
+#+begin_src haskell
+data Maybe a = Nothing | Just a
+#+end_src
+
+#+begin_src sml
+datatype 'a option = NONE | SOME of 'a
+#+end_src
+
+#+begin_src ocaml
+type 'a t = 'a option = 
+| None
+| Some of 'a
+#+end_src
+
+(SML/NJ 1993)
+
 * Modulsystem
 
 * List.of() (unmodifiable)
@@ -53,11 +69,57 @@ list.stream().map().toList();
 
 * Records
 
+** ALGOL W
+
+[[file:images/algol-w.png]]
+
+** ALGOL W
+
+[[file:images/algol-w-record.png]]
+
+** Luca Cardelli
+
 * Type Patterns
 
 * Sealed Classes
 
+** CLU
+
+[[file:images/clu.png]]
+
+https://pmg.csail.mit.edu/ftp.lcs.mit.edu/pub/pclu/CLU/3.Documents/MIT-LCS-TR-225.pdf
+
+** CLU
+
+[[file:images/clu-oneof.png]]
+
+** HOPE
+
+[[file:images/hope.png]]
+
+https://homepages.inf.ed.ac.uk/dts/pub/hope.pdf
+
+** HOPE
+
+[[file:images/hope-data.png]]
+
+** ISWIM
+
+[[file:images/iswim.png]]
+
+https://dl.acm.org/doi/10.1145/365230.365257
+
+** ISWIM
+
+[[file:images/iswim-adt.png]]
+
 * Pattern-Matching in switch
+
+** LISP
+
+[[file:images/lisp-mcbride.png]]
+
+https://personal.cis.strath.ac.uk/conor.mcbride/FVMcB-PhD.pdf
 
 * virtual threads
 
