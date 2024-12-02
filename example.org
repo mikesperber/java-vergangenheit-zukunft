@@ -22,7 +22,102 @@ Geschäftsführer bei active group
 Warum sind wir hier?
 
 
-* Generics
+* Lambdas
+
+#+begin_src java
+Runnable r = () -> System.out.println("Hello from Lambda!");
+new Thread(r).start();
+#+end_src
+
+#+BEGIN_NOTES
+Warum keine Tail-Call-Optimierung?
+
+Fehlende Unterstützung für Mehrzeiler.
+#+END_NOTES
+
+** LISP
+
+McCarthy, ~1959
+
+** Lambda-Kalkül
+
+Church, ~1930
+
+
+** Warum hat das so lang gedauert?
+
+- LISP -> HOPE/ML -> Haskell/OCaml/F#
+
+- Algol 60 -> Pascal -> C -> C++ -> Java
+
+** Warum müssen denn Variablen final werden bei Lambdas?
+
+#+begin_src java
+
+#+end_src
+
+** SECD-Maschine/Landin
+
+** Warum gibt es 51 Interfaces in =java.util.function=
+
+[[file:images/java-util-function.png]]
+
+** Impedanz-Mismatch
+
+#+begin_src java
+int double(Function<Integer, Integer> f, int n) {
+   return f.apply(f.apply(n));
+}
+
+static Integer inc(Integer n) {
+    return n + 1;
+}
+
+... double(::inc, 7) ...
+#+end_src
+
+#+begin_src haskell
+double :: (Integer -> Integer) -> Integer -> Integer
+double f n = f (f n)
+
+inc :: Integer -> Integer
+inc n = n + 1
+
+double inc 7
+#+end_src
+
+** Funktionstypen
+
+#+begin_src java
+var f = (int x) -> x + 1;
+#+end_src
+
+** ... vs Haskell/OCaml/F#
+
+... jede Funktion genau einen Parameter, eine Rückgabe
+
+** Weitere Nahstellen
+
+- =void=
+- Statements vs. Ausdrücke
+- =yield=
+
+Altes Java: Statements enthalten Ausdrücke
+
+Lambda-Ausdruck: kein Return
+
+* Typen
+** Generics
+
+Gab's nicht schon immer
+
+** Warum kein ArrayList=<int>=
+
+C++
+
+Warum anders als C++?
+
+uniforme Repräsentation
 
 #+begin_src java
 List<String> list = new ArrayList<>();
@@ -37,11 +132,236 @@ Warum gibt es keine Generics für primitive Typen?
 Type Erasure: Einschränkung oder Vorteil?
 #+END_NOTES
 
-* Strachey
+*** Strachey
 
 [[file:images/parametric-polymorphism.png]]
 
-* Stream API
+** Type Erasure
+
+#+begin_src java
+class ArrayList<T> {
+    T sum() {
+        if (T instanceof Integer)
+          ...
+        else if (T instanceof Double)
+          ...
+        ...        
+    }
+}
+#+end_src
+
+Fahrradkette:
+
+#+begin_src java
+interface NumOps<T> {
+    T zero();
+    T plus(T t1, T t2);
+    ...
+}
+    
+class ArrayList<T> {
+    T sum(automatic NumOps<T> ops) {
+       T result = ops.zero();
+       for (T element: this) {
+          result = ops.plus(result, element);
+       }
+       return result;
+    }
+}
+#+end_src
+
+** Parametricity
+
+#+begin_src java
+interface Stream<T> {
+    <U> Stream<U> map(Function<T, U> f);
+}
+#+end_src
+
+-> Typklassen/Implicits
+
+** Local variable type inference
+
+#+begin_src java
+ArrayList<Foo> list = new ArrayList<Foo>();
+    ->
+var list = Lists.of(new Foo());
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
+** Warum hat das so lange gedauert?
+
+#+begin_src java
+interface Stream<R> {
+  <R> Stream<R> map(Function<? super T,? extends R> mapper);
+}
+#+end_src
+
+- nominale vs. strukturelle Typsysteme ... Arrays
+
+- Löcher im Typsystem
+
+#+begin_src java
+class A { }
+class B extends A {}
+
+...
+    A[] as = new B[10];
+    A a = as[0];
+    B b = ...;
+    as[0] = b;
+...
+#+end_src
+
+** ML / Hindley/Milner/Damas
+
+FIXME
+
+** Optional
+
+#+begin_src java
+Optional<String> name = Optional.of("Alice");
+name.ifPresent(System.out::println);  // Alice
+#+end_src
+
+#+BEGIN_NOTES
+Optional<String> name = Optional.of("Alice");
+
+name.ifPresent(System.out::println);  // Alice
+#+END_NOTES
+
+*** Optional
+
+Haskell
+
+#+begin_src haskell
+data Maybe a = Nothing | Just a
+#+end_src
+
+Standard ML
+
+#+begin_src sml
+datatype 'a option = NONE | SOME of 'a
+#+end_src
+
+OCaml
+
+#+begin_src ocaml
+type 'a t = 'a option = 
+| None
+| Some of 'a
+#+end_src
+
+(SML/NJ 1993)
+
+** Records
+
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
+*** ALGOL W (1966)
+
+[[file:images/algol-w.png]]
+
+*** ALGOL W
+
+[[file:images/algol-w-record.png]]
+
+*** Luca Cardelli, ML
+
+FIXME
+
+** Sealed Classes
+
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
+*** Haskell
+
+#+begin_src haskell
+data FIXME
+#+end_src
+
+*** CLU
+
+[[file:images/clu.png]]
+
+https://pmg.csail.mit.edu/ftp.lcs.mit.edu/pub/pclu/CLU/3.Documents/MIT-LCS-TR-225.pdf
+
+*** CLU (1979)
+
+[[file:images/clu-oneof.png]]
+
+*** HOPE (1980)
+
+[[file:images/hope.png]]
+
+https://publications.csail.mit.edu/lcs/pubs/pdf/MIT-LCS-TR-225.pdf
+
+*** HOPE
+
+[[file:images/hope-data.png]]
+
+*** ISWIM
+
+[[file:images/iswim.png]]
+
+https://dl.acm.org/doi/10.1145/365230.365257
+
+*** ISWIM
+
+[[file:images/iswim-adt.png]]
+
+** nullable types
+
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
+** value types
+
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+* Listen / Streams
+** List.of() (unmodifiable)
+
+#+begin_src java
+List<String> immutableList = List.of("A", "B", "C");
+// immutableList.add("D");  // UnsupportedOperationException
+#+end_src
+
+#+BEGIN_NOTES
+Warum keine echten Literals wie in Python oder Kotlin?
+#+END_NOTES
+
+*** ML/HOPE
+
+FIXME
+
+*** Eigenschaften
+
+** sequenced collections
+
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
+** Stream API
 
 #+begin_src java
 List<String> names = List.of("Alice", "Bob", "Charlie");
@@ -57,9 +377,82 @@ Performance und Debugging: Vorteil oder Frust?
 Vergleich mit funktionalen Paradigmen.
 #+END_NOTES
 
-** Eigenschaften
+*** LISP (1959)
 
-* Lambdas
+FIXME
+
+** stream gatherers
+
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
+* Pattern-Matching
+** switch expressions
+
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
+*** LISP
+
+FIXME
+
+** Type Patterns
+
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
+*** CLU
+
+[[file:images/clu-tagcase.png]]
+
+** Pattern-Matching in switch
+
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
+*** LISP
+
+[[file:images/lisp-mcbride.png]]
+
+https://personal.cis.strath.ac.uk/conor.mcbride/FVMcB-PhD.pdf
+
+** record patterns
+
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
+** unnamed patterns, variables
+
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
+** primitive types in patterns
+
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
+* Default Methods
 
 #+begin_src java
 interface Animal {
@@ -71,54 +464,16 @@ class Dog implements Animal {}
 new Dog().eat();  // Eating...
 #+end_src
 
-#+BEGIN_NOTES
+#+BEGIN_NOTES^
 Flexibilität vs. Interface-Verschmutzung.
 
 Hätte man Mixins einführen sollen?
 #+END_NOTES
 
+** Sather
 
-* Lambdas
+FIXME
 
-#+begin_src java
-Runnable r = () -> System.out.println("Hello from Lambda!");
-new Thread(r).start();
-#+end_src
-
-#+BEGIN_NOTES
-Warum keine Tail-Call-Optimierung?
-
-Fehlende Unterstützung für Mehrzeiler.
-#+END_NOTES
-
-* Optional
-
-#+begin_src java
-Optional<String> name = Optional.of("Alice");
-name.ifPresent(System.out::println);  // Alice
-#+end_src
-
-#+BEGIN_NOTES
-Optional<String> name = Optional.of("Alice");
-
-name.ifPresent(System.out::println);  // Alice
-#+END_NOTES
-
-#+begin_src haskell
-data Maybe a = Nothing | Just a
-#+end_src
-
-#+begin_src sml
-datatype 'a option = NONE | SOME of 'a
-#+end_src
-
-#+begin_src ocaml
-type 'a t = 'a option = 
-| None
-| Some of 'a
-#+end_src
-
-(SML/NJ 1993)
 
 * Modulsystem
 
@@ -134,110 +489,9 @@ Hat das Modulsystem die Java-Welt wirklich verbessert?
 Zu kompliziert für einfache Projekte?
 #+END_NOTES
 
-* List.of() (unmodifiable)
+** Pebble / Cardelli 1985
 
-#+begin_src java
-List<String> immutableList = List.of("A", "B", "C");
-// immutableList.add("D");  // UnsupportedOperationException
-#+end_src
-
-#+BEGIN_NOTES
-Warum keine echten Literals wie in Python oder Kotlin?
-#+END_NOTES
-
-* Local variable type inference
-
-#+begin_src java
-#+end_src
-
-#+BEGIN_NOTES
-#+END_NOTES
-
-* switch expressions
-
-#+begin_src java
-#+end_src
-
-#+BEGIN_NOTES
-#+END_NOTES
-
-* Records
-
-#+begin_src java
-#+end_src
-
-#+BEGIN_NOTES
-#+END_NOTES
-
-** ALGOL W
-
-[[file:images/algol-w.png]]
-
-** ALGOL W
-
-[[file:images/algol-w-record.png]]
-
-** Luca Cardelli
-
-* Type Patterns
-
-#+begin_src java
-#+end_src
-
-#+BEGIN_NOTES
-#+END_NOTES
-
-* Sealed Classes
-
-#+begin_src java
-#+end_src
-
-#+BEGIN_NOTES
-#+END_NOTES
-
-** CLU
-
-[[file:images/clu.png]]
-
-https://pmg.csail.mit.edu/ftp.lcs.mit.edu/pub/pclu/CLU/3.Documents/MIT-LCS-TR-225.pdf
-
-** CLU
-
-[[file:images/clu-oneof.png]]
-
-** HOPE
-
-[[file:images/hope.png]]
-
-https://homepages.inf.ed.ac.uk/dts/pub/hope.pdf
-
-** HOPE
-
-[[file:images/hope-data.png]]
-
-** ISWIM
-
-[[file:images/iswim.png]]
-
-https://dl.acm.org/doi/10.1145/365230.365257
-
-** ISWIM
-
-[[file:images/iswim-adt.png]]
-
-* Pattern-Matching in switch
-
-#+begin_src java
-#+end_src
-
-#+BEGIN_NOTES
-#+END_NOTES
-
-** LISP
-
-[[file:images/lisp-mcbride.png]]
-
-https://personal.cis.strath.ac.uk/conor.mcbride/FVMcB-PhD.pdf
+FIXME
 
 * virtual threads
 
@@ -248,14 +502,6 @@ https://personal.cis.strath.ac.uk/conor.mcbride/FVMcB-PhD.pdf
 #+END_NOTES
 
 * structured concurrency
-
-#+begin_src java
-#+end_src
-
-#+BEGIN_NOTES
-#+END_NOTES
-
-* record patterns
 
 #+begin_src java
 #+end_src
@@ -279,22 +525,6 @@ https://personal.cis.strath.ac.uk/conor.mcbride/FVMcB-PhD.pdf
 #+BEGIN_NOTES
 #+END_NOTES
 
-* sequenced collections
-
-#+begin_src java
-#+end_src
-
-#+BEGIN_NOTES
-#+END_NOTES
-
-* unnamed patterns, variables
-
-#+begin_src java
-#+end_src
-
-#+BEGIN_NOTES
-#+END_NOTES
-
 * statements before super
 
 #+begin_src java
@@ -303,23 +533,7 @@ https://personal.cis.strath.ac.uk/conor.mcbride/FVMcB-PhD.pdf
 #+BEGIN_NOTES
 #+END_NOTES
 
-* stream gatherers
-
-#+begin_src java
-#+end_src
-
-#+BEGIN_NOTES
-#+END_NOTES
-
 * implicitly declared classes, instance main methods
-
-#+begin_src java
-#+end_src
-
-#+BEGIN_NOTES
-#+END_NOTES
-
-* primitive types in patterns
 
 #+begin_src java
 #+end_src
@@ -343,22 +557,38 @@ https://personal.cis.strath.ac.uk/conor.mcbride/FVMcB-PhD.pdf
 #+BEGIN_NOTES
 #+END_NOTES
 
-* value types
 
-#+begin_src java
-#+end_src
+* Entwicklungslinien
 
-#+BEGIN_NOTES
-#+END_NOTES
+- ALGOL - PASCAL - C - Java
 
-* nullable types
+- Simula-67 - Smalltalk - C++ - Java
 
-#+begin_src java
-#+end_src
+- LISP - HOPE - ML/Haskell - Java
 
-#+BEGIN_NOTES
-#+END_NOTES
+* Zuordnung
 
+FIXME
+  
+* Was ist als nächstes geplant?
+
+- Generics over Primitive Types
+
+- Value types
+
+- Nullable Types
+
+* Was muß noch kommen?
+
+- Funktionstypen
+
+- Tail Calls
+
+- Higher-Order-Modulsystem
+
+- Typklassen/Implicits
+
+- Effektsystem
 
 * Diagrams!
 
