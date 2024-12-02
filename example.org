@@ -25,7 +25,17 @@ Warum sind wir hier?
 * Generics
 
 #+begin_src java
+List<String> list = new ArrayList<>();
+list.add("Hello");
+// Compile-Time-Sicherheit
+String value = list.get(0);  // Kein Cast nötig
 #+end_src
+
+#+BEGIN_NOTES
+Warum gibt es keine Generics für primitive Typen?
+
+Type Erasure: Einschränkung oder Vorteil?
+#+END_NOTES
 
 * Strachey
 
@@ -34,14 +44,65 @@ Warum sind wir hier?
 * Stream API
 
 #+begin_src java
-list.stream().map().toList();
+List<String> names = List.of("Alice", "Bob", "Charlie");
+List<String> filtered = names.stream()
+    .filter(name -> name.startsWith("A"))
+    .collect(Collectors.toList());
+System.out.println(filtered);  // [Alice]
 #+end_src
 
-** subslide
+#+BEGIN_NOTES
+Performance und Debugging: Vorteil oder Frust?
+
+Vergleich mit funktionalen Paradigmen.
+#+END_NOTES
+
+** Eigenschaften
 
 * Lambdas
 
+#+begin_src java
+interface Animal {
+    default void eat() {
+        System.out.println("Eating...");
+    }
+}
+class Dog implements Animal {}
+new Dog().eat();  // Eating...
+#+end_src
+
+#+BEGIN_NOTES
+Flexibilität vs. Interface-Verschmutzung.
+
+Hätte man Mixins einführen sollen?
+#+END_NOTES
+
+
+* Lambdas
+
+#+begin_src java
+Runnable r = () -> System.out.println("Hello from Lambda!");
+new Thread(r).start();
+#+end_src
+
+#+BEGIN_NOTES
+Warum keine Tail-Call-Optimierung?
+
+Fehlende Unterstützung für Mehrzeiler.
+#+END_NOTES
+
 * Optional
+
+#+begin_src java
+Optional<String> name = Optional.of("Alice");
+name.ifPresent(System.out::println);  // Alice
+#+end_src
+
+#+BEGIN_NOTES
+Optional<String> name = Optional.of("Alice");
+
+name.ifPresent(System.out::println);  // Alice
+#+END_NOTES
 
 #+begin_src haskell
 data Maybe a = Nothing | Just a
@@ -61,13 +122,52 @@ type 'a t = 'a option =
 
 * Modulsystem
 
+#+begin_src java
+module com.example {
+    exports com.example.api;
+}
+#+end_src
+
+#+BEGIN_NOTES
+Hat das Modulsystem die Java-Welt wirklich verbessert?
+
+Zu kompliziert für einfache Projekte?
+#+END_NOTES
+
 * List.of() (unmodifiable)
+
+#+begin_src java
+List<String> immutableList = List.of("A", "B", "C");
+// immutableList.add("D");  // UnsupportedOperationException
+#+end_src
+
+#+BEGIN_NOTES
+Warum keine echten Literals wie in Python oder Kotlin?
+#+END_NOTES
 
 * Local variable type inference
 
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
 * switch expressions
 
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
 * Records
+
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
 
 ** ALGOL W
 
@@ -81,7 +181,19 @@ type 'a t = 'a option =
 
 * Type Patterns
 
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
 * Sealed Classes
+
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
 
 ** CLU
 
@@ -115,6 +227,12 @@ https://dl.acm.org/doi/10.1145/365230.365257
 
 * Pattern-Matching in switch
 
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
 ** LISP
 
 [[file:images/lisp-mcbride.png]]
@@ -123,33 +241,123 @@ https://personal.cis.strath.ac.uk/conor.mcbride/FVMcB-PhD.pdf
 
 * virtual threads
 
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
 * structured concurrency
+
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
 
 * record patterns
 
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
 * scoped values
+
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
 
 * string templates (inzwischen wieder abgeschafft)
 
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
 * sequenced collections
+
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
 
 * unnamed patterns, variables
 
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
 * statements before super
+
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
 
 * stream gatherers
 
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
 * implicitly declared classes, instance main methods
+
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
 
 * primitive types in patterns
 
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
 * flexible constructor bodies (cf. statements before super)
+
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
 
 * module import
 
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
 * value types
 
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
 * nullable types
+
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
 
 
 * Diagrams!
