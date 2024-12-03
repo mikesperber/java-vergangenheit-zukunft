@@ -35,11 +35,15 @@ Warum keine Tail-Call-Optimierung?
 Fehlende Unterstützung für Mehrzeiler.
 #+END_NOTES
 
+** McCarthy, 1960
+
+[[file:images/lisp.png]]
+
 ** LISP
 
-McCarthy, ~1959
+[[file:images/lisp-lambda.png]]
 
-** Lambda-Kalkül
+** Church, 1941
 
 Church, ~1930
 
@@ -105,6 +109,67 @@ var f = (int x) -> x + 1;
 Altes Java: Statements enthalten Ausdrücke
 
 Lambda-Ausdruck: kein Return
+
+* Listen / Streams
+
+#+BEGIN_NOTES
+Falk: Lambdas wurden ja in Java 8 eingeführt, um die Programmierung
+mit Streams zu unterstützen.  Kommen die Streams auch aus der
+Lisp-Ecke?
+#+END_NOTES
+
+** List.of() (unmodifiable)
+
+#+begin_src java
+List<String> immutableList = List.of("A", "B", "C");
+// immutableList.add("D");  // UnsupportedOperationException
+#+end_src
+
+#+BEGIN_NOTES
+Warum keine echten Literals wie in Python oder Kotlin?
+#+END_NOTES
+
+*** ML/HOPE
+
+FIXME
+
+*** Eigenschaften
+
+** sequenced collections
+
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
+** Stream API
+
+#+begin_src java
+List<String> names = List.of("Alice", "Bob", "Charlie");
+List<String> filtered = names.stream()
+    .filter(name -> name.startsWith("A"))
+    .collect(Collectors.toList());
+System.out.println(filtered);  // [Alice]
+#+end_src
+
+#+BEGIN_NOTES
+Performance und Debugging: Vorteil oder Frust?
+
+Vergleich mit funktionalen Paradigmen.
+#+END_NOTES
+
+*** LISP (1959)
+
+FIXME
+
+** stream gatherers
+
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
 
 * Typen
 ** Generics
@@ -221,6 +286,10 @@ FIXME
 
 ** Optional
 
+#+BEGIN_NOTES
+Mike: Übrigens, Falk, wo wir gerade bei ML sind, das hier kommt auch von da
+#+END_NOTES
+
 #+begin_src java
 Optional<String> name = Optional.of("Alice");
 name.ifPresent(System.out::println);  // Alice
@@ -256,13 +325,24 @@ type 'a t = 'a option =
 
 (SML/NJ 1993)
 
-** Records
+** nullable types
 
 #+begin_src java
 #+end_src
 
 #+BEGIN_NOTES
 #+END_NOTES
+
+** Records
+
+#+BEGIN_NOTES
+Falk: Dann müßtest Du ja Records toll finden, das ist ja sowas wie
+algebraische Datentypen in Haskell.
+#+END_NOTES
+
+#+begin_src java
+
+#+end_src
 
 *** ALGOL W (1966)
 
@@ -320,14 +400,6 @@ https://dl.acm.org/doi/10.1145/365230.365257
 
 [[file:images/iswim-adt.png]]
 
-** nullable types
-
-#+begin_src java
-#+end_src
-
-#+BEGIN_NOTES
-#+END_NOTES
-
 ** value types
 
 #+begin_src java
@@ -335,60 +407,6 @@ https://dl.acm.org/doi/10.1145/365230.365257
 
 #+BEGIN_NOTES
 #+END_NOTES
-* Listen / Streams
-** List.of() (unmodifiable)
-
-#+begin_src java
-List<String> immutableList = List.of("A", "B", "C");
-// immutableList.add("D");  // UnsupportedOperationException
-#+end_src
-
-#+BEGIN_NOTES
-Warum keine echten Literals wie in Python oder Kotlin?
-#+END_NOTES
-
-*** ML/HOPE
-
-FIXME
-
-*** Eigenschaften
-
-** sequenced collections
-
-#+begin_src java
-#+end_src
-
-#+BEGIN_NOTES
-#+END_NOTES
-
-** Stream API
-
-#+begin_src java
-List<String> names = List.of("Alice", "Bob", "Charlie");
-List<String> filtered = names.stream()
-    .filter(name -> name.startsWith("A"))
-    .collect(Collectors.toList());
-System.out.println(filtered);  // [Alice]
-#+end_src
-
-#+BEGIN_NOTES
-Performance und Debugging: Vorteil oder Frust?
-
-Vergleich mit funktionalen Paradigmen.
-#+END_NOTES
-
-*** LISP (1959)
-
-FIXME
-
-** stream gatherers
-
-#+begin_src java
-#+end_src
-
-#+BEGIN_NOTES
-#+END_NOTES
-
 * Pattern-Matching
 ** switch expressions
 
@@ -474,7 +492,6 @@ Hätte man Mixins einführen sollen?
 
 FIXME
 
-
 * Modulsystem
 
 #+begin_src java
@@ -492,6 +509,15 @@ Zu kompliziert für einfache Projekte?
 ** Pebble / Cardelli 1985
 
 FIXME
+
+* module import
+
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
 
 * virtual threads
 
@@ -549,15 +575,6 @@ FIXME
 #+BEGIN_NOTES
 #+END_NOTES
 
-* module import
-
-#+begin_src java
-#+end_src
-
-#+BEGIN_NOTES
-#+END_NOTES
-
-
 * Entwicklungslinien
 
 - ALGOL - PASCAL - C - Java
@@ -572,23 +589,29 @@ FIXME
   
 * Was ist als nächstes geplant?
 
-- Generics over Primitive Types
+** Generics over Primitive Types
 
-- Value types
+** Value types
 
-- Nullable Types
+** Nullable Types
 
 * Was muß noch kommen?
 
-- Funktionstypen
+Haskell-Beispiele
 
-- Tail Calls
+** Tupel
+
+** Either
+
+** Funktionstypen
+
+** Tail Calls
+
+** Typklassen/Implicits
+  
+- Effektsystem
 
 - Higher-Order-Modulsystem
-
-- Typklassen/Implicits
-
-- Effektsystem
 
 * Diagrams!
 
