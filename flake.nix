@@ -47,7 +47,7 @@
         ]);
       in {
         devShells.default = pkgs.mkShell {
-          packages = [ emacs ];
+          packages = [ emacs pkgs.plantuml ];
         };
         packages = {
           # To be able to specifically build decktape without the Nix
