@@ -46,6 +46,9 @@
           p.clojure-mode
         ]);
       in {
+        devShells.default = pkgs.mkShell {
+          packages = [ emacs ];
+        };
         packages = {
           # To be able to specifically build decktape without the Nix
           # sandbox, we need to make it a package instead of an app.
