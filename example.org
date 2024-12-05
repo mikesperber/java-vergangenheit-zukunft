@@ -98,9 +98,9 @@ Im Vortrag werfen Falk (Java-Enthusiast) und Mike (Experte für Programmiersprac
 
 ** Inspiriert durch ...
 
-Algol60 -> Algol68 -> Pascal -> C -> Java
-
-statische Typsysteme: HOPE und ML -> Miranda -> Haskell/OCaml/F#
+- Smalltalk
+- C++
+- ML/Haskell/OCaml/F#
 
 #+BEGIN_NOTES
 frühe OO-Sprachen waren ungetypt: Smalltalk, C++
@@ -523,6 +523,8 @@ CREATE TABLE orders
 
 ** Records
 
+FIXME
+
 #+BEGIN_NOTES
 Falk: Dann müßtest Du ja Records toll finden, das ist ja sowas wie
 algebraische Datentypen in Haskell.
@@ -786,6 +788,18 @@ parseDigit c =
 rev [] acc = acc
 rec (x:xs) acc = rev xs (x:acc)
 #+end_src
+
+** Tail Calls
+
+[[file:images/guy-steele-tail-calls.png]]
+
+** Scheme, Tail Calls
+
+[[file:images/ltu.png]]
+
+** Guy Steele
+
+[[file:images/guy-steele-java.png]]
 
 ** Typklassen/Implicits
 
