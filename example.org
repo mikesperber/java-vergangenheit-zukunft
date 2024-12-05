@@ -4,7 +4,7 @@
 #+REVEAL_THEME: ./css/themes/active.css
 #+REVEAL_HLEVEL: 1
 #+REVEAL_TRANS: none
-#+OPTIONS: toc:nil reveal-center:f H:4
+#+OPTIONS: num:nil toc:nil reveal-center:f H:4
 
 * Falk Sippach
 
@@ -21,6 +21,10 @@ Active Group GmbH
 
 =@sperbsen@discuss.systems=
 
+[[file:images/mike.jpg]]
+
+* Active Group GmbH
+
 #+ATTR_HTML: :height 100px;
 [[file:images/ag-logo-plain.png][file:images/ag-logo-plain.png]]
 - Tübingen, Germany
@@ -29,9 +33,6 @@ Active Group GmbH
 - iSABQ Foundation, FUNAR, FLEX, DSL
 
 Blog [[https://funktionale-programmierung.de]]
-
-[[file:images/mike.jpg]]
-
 
 * BOB 2025
 
@@ -139,7 +140,7 @@ Fehlende Unterstützung für Mehrzeiler.
 
 **FP**
 LISP (1960) ->
-ML (1973) / Scheme (1975) / HOPE (1980)
+ML (1973) / Scheme (1975) / HOPE (1980) ->
 Haskell/OCaml/F# (ab 1985)
 
 **PROC**
@@ -379,6 +380,8 @@ class LinkedList implements Collection {
 
 ** Type Erasure blöd
 
+FIXME
+
 ** Parametricity
 
 #+begin_src java
@@ -393,14 +396,15 @@ interface Stream<T> {
 
 #+begin_src java
 public <T> T sum(ArrayList<T> list) {
-if (T.class == Integer.class) {
-    int result = 0;
-    ...
-    return new result;
-} else if (T.class == Float.class) {
-    float result = 0;
-    ...
-    return result;
+    if (T.class == Integer.class) {
+	int result = 0;
+	...
+	return new result;
+    } else if (T.class == Float.class) {
+	float result = 0;
+	...
+	return result;
+    } else ...
 }
 #+end_src
 
@@ -617,10 +621,6 @@ https://pmg.csail.mit.edu/ftp.lcs.mit.edu/pub/pclu/CLU/3.Documents/MIT-LCS-TR-22
 #+BEGIN_NOTES
 #+END_NOTES
 
-** LISP
-
-FIXME
-
 ** Type Patterns
 
 #+begin_src java
@@ -647,7 +647,11 @@ FIXME
 
 https://personal.cis.strath.ac.uk/conor.mcbride/FVMcB-PhD.pdf
 
-** Hope
+** McBride, 1970
+
+[[file:images/mcbride-pattern-matching.png]]
+
+** HOPE, 1980
 
 [[file:images/hope-pattern-matching.png]]
 
@@ -675,30 +679,11 @@ https://personal.cis.strath.ac.uk/conor.mcbride/FVMcB-PhD.pdf
 #+BEGIN_NOTES
 #+END_NOTES
 
-* Default Methods
-
-#+begin_src java
-interface Animal {
-    default void eat() {
-        System.out.println("Eating...");
-    }
-}
-class Dog implements Animal {}
-new Dog().eat();  // Eating...
-#+end_src
-
-#+BEGIN_NOTES
-Flexibilität vs. Interface-Verschmutzung.
-
-Hätte man Mixins einführen sollen?
-#+END_NOTES
-
-** Sather
-
-FIXME
 
 * Was gab's noch
 
+- Futures
+- /default methods/
 - Modulsystem
 - virtuelle Threads
 - /structured concurrency/
@@ -729,11 +714,13 @@ Java
 
 ** Zuordnung
 
+| default methods        | Haskell    | FP      |
 | Generics               | ML         | FP      |
 | Lambda                 | LISP       | FP      |
 | Listen/map             | LISP       | FP      |
 | Typinferenz            | ML         | FP      |
 | Records                | ALGOL W/ML | PROC/FP |
+| Futures                | Scheme     | FP      |
 | Virtual Threads        | Scheme     | FP      |
 | Structured Concurrency | Erlang     | FP      |
 | Scoped Values          | LISP       | FP      |
@@ -818,3 +805,26 @@ foldMonoid list = foldr combine neutral list
 * Vielen Dank
 
 Fragen
+
+* Default Methods
+
+#+begin_src java
+interface Animal {
+    default void eat() {
+        System.out.println("Eating...");
+    }
+}
+class Dog implements Animal {}
+new Dog().eat();  // Eating...
+#+end_src
+
+#+BEGIN_NOTES
+Flexibilität vs. Interface-Verschmutzung.
+
+Hätte man Mixins einführen sollen?
+#+END_NOTES
+
+** Sather
+
+FIXME
+
