@@ -8,12 +8,19 @@
 
 * Falk Sippach
 
-- Softwarearchitekt bei embarc
+#+ATTR_HTML: :height 100px;
+[[file:images/falk.jpg]]
+
+Softwarearchitekt bei embarc
+
+✉️falk.sippach@embarc.de
+
+#+ATTR_HTML: :height 50px;
+[[file:images/embarc.svg][file:images/embarc.svg]]
+
 - Trainer für iSAQB Foundation und Advanced
 - (Co-)Organisator von JUG Darmstadt, CyberLand, SpeaKonf, Tech2Talk
 - JavaLand, Java Forum Nord, XP-Days, ...
-
-[[file:images/falk.jpg]]
 
 * Mike Sperber
 
@@ -40,17 +47,23 @@ Blog [[https://funktionale-programmierung.de]]
 
 https://bobkonf.de/
 
-* Warum sind wir hier?
+* Warum sind wir hier? (F)
     :PROPERTIES:
     :reveal_background: ./images/fahrradkette.jpg
     :reveal_background_trans: slide
     :reveal_background_opacity: 0.2
     :END:
 
-- Java wird 30
+Java wird 30
+
+#+ATTR_HTML: :class fragment
 - Wie ist Java entstanden?
+#+ATTR_HTML: :class fragment
+- Was ist nicht gut gelöst in Java?
+#+ATTR_HTML: :class fragment
 - Wie entwickelt es sich gerade weiter?
-- Was könnte noch kommen?
+#+ATTR_HTML: :class fragment
+- Was fehlt in Java, was könnte noch kommen?
 
 #+BEGIN_NOTES
 https://pixabay.com/de/photos/fahrradkette-verrostet-alt-4788473/
@@ -79,7 +92,7 @@ Im Vortrag werfen Falk (Java-Enthusiast) und Mike (Experte für Programmiersprac
 - … und noch einiges mehr.
 
 
-* Meilensteine von Java
+* Meilensteine von Java (F)
 
 - 1995: 1.0
 - 2004: 5.0 (Generics)
@@ -89,7 +102,7 @@ Im Vortrag werfen Falk (Java-Enthusiast) und Mike (Experte für Programmiersprac
 - 2021: 17 (Pattern Matching, ...)
 - 2023: 21 (Virtual Threads, ...)
 
-** Warum ist Java immer noch so populär?
+** Warum ist Java immer noch so populär? (F)
 
 - halbjährliche Releases seit Java 10 (2018)
 - LTS alle 2 Jahre
@@ -106,7 +119,7 @@ Im Vortrag werfen Falk (Java-Enthusiast) und Mike (Experte für Programmiersprac
 frühe OO-Sprachen waren ungetypt: Smalltalk, C++
 #+END_NOTES
 
-* Lambda
+* Lambda (F)
 
 #+begin_src java
 Runnable r = () -> System.out.println("Hello from Lambda!");
@@ -118,6 +131,29 @@ Warum keine Tail-Call-Optimierung?
 
 Fehlende Unterstützung für Mehrzeiler.
 #+END_NOTES
+
+** Lambdas als Parameter (F)
+
+Higher Order Functions:
+
+#+begin_src java
+List<String> names = List.of("Alice", "Bob", "Charlie");
+List<String> upperCaseNames = names.stream()
+    .map(name -> {
+        System.out.println("Converting: " + name);
+        return name.toUpperCase();
+    })
+    .toList();
+System.out.println(upperCaseNames);  // [ALICE, BOB, CHARLIE]
+#+end_src
+
+Methodenreferenz:
+
+#+begin_src java
+List<String> names = List.of("Alice", "Bob", "Charlie");
+names.forEach(System.out::println);
+#+end_src
+
 
 ** McCarthy, 1960
 
@@ -181,6 +217,14 @@ private TimeZone extractCalendarTimeZoneComponent(Calendar cal, TimeZone calTz) 
 ** Landin, 1964
 
 [[file:images/landin-closure.png]]
+
+** Lambda für funktionale Interfaces (F)
+
+#+begin_src java
+Function<Integer, Integer> square = x -> x * x;
+System.out.println(square.apply(5));  // 25
+#+end_src
+
 
 ** Warum gibt es 51 Interfaces in =java.util.function=?
 
@@ -246,6 +290,13 @@ double inc 7
 - =yield= vs. =return=
 
 * Listen / Streams
+
+#+begin_src java
+#+end_src
+
+#+begin_src java
+#+end_src
+
 
 #+BEGIN_NOTES
 Falk: Lambdas wurden ja in Java 8 eingeführt, um die Programmierung
