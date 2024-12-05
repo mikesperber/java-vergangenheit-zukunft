@@ -178,6 +178,30 @@ mit Streams zu unterstützen.  Kommen die Streams auch aus der
 Lisp-Ecke?
 #+END_NOTES
 
+** Stream API
+
+#+begin_src java
+List<String> names = List.of("Alice", "Bob", "Charlie");
+List<String> filtered = names.stream()
+    .filter(name -> name.startsWith("A"))
+    .collect(Collectors.toList());
+System.out.println(filtered);  // [Alice]
+#+end_src
+
+#+BEGIN_NOTES
+Performance und Debugging: Vorteil oder Frust?
+
+Vergleich mit funktionalen Paradigmen.
+#+END_NOTES
+
+** LISP
+
+[[file:images/lisp-1.png]]
+
+** LISP
+
+[[file:images/lisp-maplist.png]]
+
 ** List.of() (unmodifiable)
 
 #+begin_src java
@@ -202,26 +226,6 @@ FIXME
 
 #+BEGIN_NOTES
 #+END_NOTES
-
-** Stream API
-
-#+begin_src java
-List<String> names = List.of("Alice", "Bob", "Charlie");
-List<String> filtered = names.stream()
-    .filter(name -> name.startsWith("A"))
-    .collect(Collectors.toList());
-System.out.println(filtered);  // [Alice]
-#+end_src
-
-#+BEGIN_NOTES
-Performance und Debugging: Vorteil oder Frust?
-
-Vergleich mit funktionalen Paradigmen.
-#+END_NOTES
-
-*** LISP (1959)
-
-FIXME
 
 ** stream gatherers
 
