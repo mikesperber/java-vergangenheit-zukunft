@@ -595,17 +595,6 @@ name.ifPresent(System.out::println);  // Alice
 Mike: Übrigens, Falk, wo wir gerade bei ML sind, das hier kommt auch von da
 #+END_NOTES
 
-#+begin_src java
-Optional<String> name = Optional.of("Alice");
-name.ifPresent(System.out::println);  // Alice
-#+end_src
-
-#+BEGIN_NOTES
-Optional<String> name = Optional.of("Alice");
-
-name.ifPresent(System.out::println);  // Alice
-#+END_NOTES
-
 ** Optional
 
 Haskell
@@ -931,6 +920,7 @@ static void printColorOfUpperLeftPoint(Rectangle r) {
 
 ** Java 21: Unnamed Patterns, Variables (F)
 
+
 #+begin_src java
 static <T> boolean contains(T value, LinkedList<T> list) {
   return switch (list) {
@@ -945,14 +935,21 @@ static <T> boolean contains(T value, LinkedList<T> list) {
 #+BEGIN_NOTES
 #+END_NOTES
 
-** primitive types in patterns
+** Java 23: Primitive Types in Patterns
 
 #+begin_src java
+// dominierender vor dominierten Typ geht nicht (int vor byte)
+value = 10;
+switch (value) {
+    // case int _ -> System.out.println(value + " instanceof int");
+    case byte _ -> System.out.println(value + " instanceof byte");
+    case int _ -> System.out.println(value + " instanceof int");
+}
+
 #+end_src
 
 #+BEGIN_NOTES
 #+END_NOTES
-
 
 * Was gab's noch
 
