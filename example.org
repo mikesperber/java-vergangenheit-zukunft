@@ -4,7 +4,7 @@
 #+REVEAL_THEME: ./css/themes/active.css
 #+REVEAL_HLEVEL: 1
 #+REVEAL_TRANS: none
-#+OPTIONS: toc:nil reveal-center:f H:4
+#+OPTIONS: num:nil toc:nil reveal-center:f H:4
 
 * Falk Sippach
 
@@ -14,15 +14,30 @@ Organisator von ...
 
 * Mike Sperber
 
-Geschäftsführer bei active group
-...
+Active Group GmbH
+
+=@sperbsen@discuss.systems=
+
+#+ATTR_HTML: :height 100px;
+[[file:images/ag-logo-plain.png][file:images/ag-logo-plain.png]]
+- Tübingen, Germany
+- Projektentwicklung, Beratung, Training
+- Scala, Clojure, F#, Haskell, OCaml, Erlang, Elixir, Swift
+- iSABQ Foundation, FUNAR, FLEX, DSL
+  
+Blog [[https://funktionale-programmierung.de]]
+
+* BOB 2025
+
+[[file:images/bob_head_2to1.png]]
+
+https://bobkonf.de/
 
 * Hätte, hätte Fahrradkette
 
 Warum sind wir hier?
 
-
-* Lambdas
+* Lambda
 
 #+begin_src java
 Runnable r = () -> System.out.println("Hello from Lambda!");
@@ -37,6 +52,7 @@ Fehlende Unterstützung für Mehrzeiler.
 
 ** McCarthy, 1960
 
+#+ATTR_HTML: :class r-stretch
 [[file:images/lisp.png]]
 
 ** LISP
@@ -45,28 +61,73 @@ Fehlende Unterstützung für Mehrzeiler.
 
 ** Church, 1941
 
-Church, ~1930
+[[file:images/church.png]]
 
+** Lambda-Kalkül
+
+[[file:images/church-lambda.png]]
 
 ** Warum hat das so lang gedauert?
 
-- LISP -> HOPE/ML -> Haskell/OCaml/F#
+LISP (1960) ->
+ML (1973) / Scheme (1975) / HOPE (1980)
+Haskell/OCaml/F# (ab 1985)
 
-- Algol 60 -> Pascal -> C -> C++ -> Java
+Algol 60 ->
+Pascal (1970) ->
+C (1972) ->
+C++ (1985) ->
+Java (1995)
 
-** Warum müssen denn Variablen final werden bei Lambdas?
+** "Variable used in lambda expression should be final or effectively final"
 
 #+begin_src java
-
+private TimeZone extractCalendarTimeZoneComponent(Calendar cal, TimeZone calTz) {
+    try {
+        cal.getComponents().getComponents("VTIMEZONE")
+          .forEach(component -> {
+            VTimeZone v = (VTimeZone) component;
+            v.getTimeZoneId();
+            if (calTz == null) {
+                calTz = TimeZone.getTimeZone(v.getTimeZoneId().getValue());
+            }
+        });
+    } catch (Exception e) {
+        log.warn("Unable to determine ical timezone", e);
+    }
+    return null;
+}
 #+end_src
 
-** SECD-Maschine/Landin
+** Was sind Closures?
 
-** Warum gibt es 51 Interfaces in =java.util.function=
+[[file:images/landin-evaluation.png]]
+
+** Landin, 1964
+
+[[file:images/landin-closure.png]]
+
+** Warum gibt es 51 Interfaces in =java.util.function=?
 
 [[file:images/java-util-function.png]]
 
-** Impedanz-Mismatch
+** Generics und primitive Typen
+
+#+begin_src java
+
+interface Function<T,R> {
+    default <V> Function<T,V> andThen(Function<? super R,? extends V> after);
+    R apply(T t)
+    default <V> Function<V,R> compose(Function<? super V,? extends T> before)
+    static <T> Function<T,T> identity()    
+}
+
+interface DoubleFunction<R> {
+    R apply(double value);
+}
+#+end_src
+
+** Methoden als Objekte
 
 #+begin_src java
 int double(Function<Integer, Integer> f, int n) {
@@ -80,7 +141,20 @@ static Integer inc(Integer n) {
 ... double(::inc, 7) ...
 #+end_src
 
+** Funktionstypen
+
+"Cannot infer type"
+
+#+begin_src java
+var inc = (int x) -> x + 1;
+#+end_src
+
+** Funktionen in Haskell
+
 #+begin_src haskell
+(.) :: (b -> c) -> (a -> b) -> (b -> c)
+f . g = \ a -> f (g a)
+
 double :: (Integer -> Integer) -> Integer -> Integer
 double f n = f (f n)
 
@@ -90,25 +164,11 @@ inc n = n + 1
 double inc 7
 #+end_src
 
-** Funktionstypen
-
-#+begin_src java
-var f = (int x) -> x + 1;
-#+end_src
-
-** ... vs Haskell/OCaml/F#
-
-... jede Funktion genau einen Parameter, eine Rückgabe
-
 ** Weitere Nahstellen
 
 - =void=
 - Statements vs. Ausdrücke
-- =yield=
-
-Altes Java: Statements enthalten Ausdrücke
-
-Lambda-Ausdruck: kein Return
+- =yield= vs. =return=
 
 * Listen / Streams
 
@@ -597,7 +657,7 @@ FIXME
 
 * Was muß noch kommen?
 
-Haskell-Beispiele
+
 
 ** Tupel
 
@@ -612,37 +672,6 @@ Haskell-Beispiele
 - Effektsystem
 
 - Higher-Order-Modulsystem
-
-* Diagrams!
-
-Writing PlantUML code to get nice images.
-
-#+begin_src plantuml :file plantuml/output/dia.png
-@startuml
-[*] --> State1
-State1 --> [*]
-State1 : this is a string
-State1 : this is another string
-
-State1 -> State2
-State2 --> [*]
-@enduml
-#+end_src
-
-* C4 diagrams
-
-C4 container diagrams are also possible.
-
-#+begin_src plantuml :file plantuml/output/c4.png
-@startuml
-!include plantuml/plugins/C4_Container.puml
-
-Container(client, "web client")
-Container(server, "web server")
-Rel(client, server, "talks to")
-
-@enduml
-#+end_src
 
 * Vielen Dank
 Fragen
