@@ -332,6 +332,24 @@ Vergleich mit funktionalen Paradigmen.
 
 [[file:images/lisp-maplist.png]]
 
+** Java 8: Default Methods (F)
+
+#+begin_src java
+interface Animal {
+    default void eat() {
+        System.out.println("Eating...");
+    }
+}
+class Dog implements Animal {}
+new Dog().eat();  // Eating...
+#+end_src
+
+#+BEGIN_NOTES
+Flexibilität vs. Interface-Verschmutzung.
+
+Hätte man Mixins einführen sollen?
+#+END_NOTES
+
 ** Java 9: List.of() - unmodifiable (F)
 
 #+begin_src java
@@ -387,8 +405,35 @@ Optional<String> numberString =
 System.out.println(numberString);
 #+end_src
 
+#+BEGIN_NOTES
+#+END_NOTES
+
+** Java 22/24: Stream Gatherers (F)
+
+#+begin_src java
+interface Gatherer<T, A, R> {
+    default Supplier<A> initializer() {
+        return defaultInitializer();
+    };
+
+    Integrator<A, T, R> integrator();
+
+    default BinaryOperator<A> combiner() {
+        return defaultCombiner();
+    }
+
+    default BiConsumer<A, Downstream<? super R>> finisher() {
+        return defaultFinisher();
+    };
+}
+#+end_src
 
 #+BEGIN_NOTES
+A gatherer is defined by four functions that work together:
+The optional initializer function provides an object that maintains private state while processing stream elements. For example, a gatherer can store the current element so that, the next time it is applied, it can compare the new element with the now-previous element and, say, emit only the larger of the two. In effect, such a gatherer transforms two input elements into one output element.
+The integrator function integrates a new element from the input stream, possibly inspecting the private state object and possibly emitting elements to the output stream. It can also terminate processing before reaching the end of the input stream; for example, a gatherer searching for the largest of a stream of integers can terminate if it detects Integer.MAX_VALUE.
+The optional combiner function can be used to evaluate the gatherer in parallel when the input stream is marked as parallel. If a gatherer is not parallel-capable then it can still be part of a parallel stream pipeline, but it is evaluated sequentially. This is useful for cases where an operation is inherently ordered in nature and thus cannot be parallelized.
+The optional finisher function is invoked when there are no more input elements to consume. This function can inspect the private state object and, possibly, emit additional output elements. For example, a gatherer searching for a specific element amongst its input elements can report failure, say by throwing an exception, when its finisher is invoked.
 #+END_NOTES
 
 * Typen
@@ -714,26 +759,92 @@ https://pmg.csail.mit.edu/ftp.lcs.mit.edu/pub/pclu/CLU/3.Documents/MIT-LCS-TR-22
 
 [[file:images/hope-data.png]]
 
-** value types
+** Java ?: Value Types
+
+Project Valhalla - "Codes like a class, works like an int."
+
+#+begin_src java
+value class USDCurrency implements Comparable<USDCurrency> {
+    private int cs; // implicitly final
+    private USDCurrency(int cs) { this.cs = cs; }
+
+    public USDCurrency(int dollars, int cents) {
+        this(dollars * 100 + (dollars < 0 ? -cents : cents));
+    }
+
+    public int dollars() { return cs/100; }
+    public int cents() { return Math.abs(cs%100); }
+
+    public USDCurrency plus(USDCurrency that) {
+        return new USDCurrency(cs + that.cs);
+    }
+
+    public int compareTo(USDollars that) { ... }
+    public String toString() { ... }
+}
+#+end_src
+
+#+REVEAL: split
+
+#+begin_src java
+value record Color(byte red, byte green, byte blue) {
+    public Color(int r, int g, int b) {
+        this(checkByte(r), checkByte(g), checkByte(b));
+    }
+
+    private static byte checkByte(int x) {
+        if (x < 0 || x > 255) throw new IllegalArgumentException();
+        return (byte) (x & 0xff);
+    }
+
+    public Color mix(Color that) {
+        return new Color(avg(red, that.red),
+                         avg(green, that.green),
+                         avg(blue, that.blue));
+    }
+
+    private static byte avg(byte b1, byte b2) {
+        return (byte) (((b1 & 0xff) + (b2 & 0xff)) / 2);
+    }
+}
+#+end_src
 
 #+begin_src java
 #+end_src
 
 #+BEGIN_NOTES
 #+END_NOTES
+
 * Pattern-Matching
 
-** switch expressions
+** Java 12: Switch Expressions (F)
 
 #+begin_src java
+String developerRating( int numberOfChildren ) {
+  return switch (numberOfChildren) {
+    case 0 -> "open source contributor";
+    case 1, 2 -> "junior";
+    case 3 -> "senior";
+    default -> {
+      if (numberOfChildren < 0)
+        throw new IndexOutOfBoundsException( numberOf… );
+      yield "manager";
+    }
+  };
+}
 #+end_src
 
 #+BEGIN_NOTES
 #+END_NOTES
 
-** Type Patterns
+** Java 15: Type Patterns (F)
 
 #+begin_src java
+private static boolean isNullOrEmpty(Object o) {
+    return o == null ||
+           o instanceof String s && s.isBlank() ||
+           o instanceof Collection c && c.isEmpty();
+}
 #+end_src
 
 #+BEGIN_NOTES
@@ -743,9 +854,28 @@ https://pmg.csail.mit.edu/ftp.lcs.mit.edu/pub/pclu/CLU/3.Documents/MIT-LCS-TR-22
 
 [[file:images/clu-tagcase.png]]
 
-** Pattern-Matching in switch
+** Java 17: Pattern-Matching in switch (F)
 
 #+begin_src java
+String evaluateTypeWithSwitch( Object o ) {
+  return switch(o) {
+    case String s -> "String: " + s;
+    case Collection c -> "Collection: " + c;
+    default -> "Something else: " + o;
+  };
+}
+#+end_src
+
+#+begin_src java
+boolean isNullOrEmptyWithSwitch( Object o ) {
+  return switch(o) {
+    case null -> true;
+    case String s when s.isBlank() -> true;
+    case String s -> false;
+    case Collection c when c.isEmpty() -> true;
+    default -> false;
+  };
+}
 #+end_src
 
 #+BEGIN_NOTES
@@ -765,17 +895,51 @@ https://personal.cis.strath.ac.uk/conor.mcbride/FVMcB-PhD.pdf
 
 [[file:images/hope-pattern-matching.png]]
 
-** record patterns
+** Record Patterns (F)
 
 #+begin_src java
+record Point(int x, int y) {}
+
+void printSum(Object o) {
+    if (o instanceof Point(int x, int y)) {
+        System.out.println(x + y);
+    }
+}
+#+end_src
+
+#+REVEAL: split
+
+#+begin_src java
+record Point(int x, int y) {}
+enum Color { RED, GREEN, BLUE }
+record ColoredPoint(Point p, Color c) {}
+record Rectangle(ColoredPoint cp1, ColoredPoint cp2) {}
+
+static void printColorOfUpperLeftPoint(Rectangle r) {
+  if (r instanceof Rectangle(
+		ColoredPoint(
+			Point(int x, int y) p,
+			Color c),
+        	ColoredPoint cp2)) {
+    System.out.println(c);
+  }
+}
 #+end_src
 
 #+BEGIN_NOTES
 #+END_NOTES
 
-** unnamed patterns, variables
+** Java 21: Unnamed Patterns, Variables (F)
 
 #+begin_src java
+static <T> boolean contains(T value, LinkedList<T> list) {
+  return switch (list) {
+    case Empty _ -> false;
+    case Element<T>(T v, _)
+      when Objects.equals(v, value) -> true;
+    case Element<T>(_, var tail) -> contains(value, tail);
+  };
+}
 #+end_src
 
 #+BEGIN_NOTES
@@ -929,23 +1093,3 @@ foldMonoid list = foldr combine neutral list
 * Vielen Dank
 
 Fragen
-
-* Default Methods
-
-#+begin_src java
-interface Animal {
-    default void eat() {
-        System.out.println("Eating...");
-    }
-}
-class Dog implements Animal {}
-new Dog().eat();  // Eating...
-#+end_src
-
-#+BEGIN_NOTES
-Flexibilität vs. Interface-Verschmutzung.
-
-Hätte man Mixins einführen sollen?
-#+END_NOTES
-
-
