@@ -4,13 +4,16 @@
 #+REVEAL_THEME: ./css/themes/active.css
 #+REVEAL_HLEVEL: 1
 #+REVEAL_TRANS: none
-#+OPTIONS: num:nil toc:nil reveal-center:f H:4
+#+OPTIONS: toc:nil reveal-center:f H:4
 
 * Falk Sippach
 
-Softwarearchitekt bei embarc
-Organisator von ...
+- Softwarearchitekt bei embarc
+- Trainer für iSAQB Foundation und Advanced
+- (Co-)Organisator von JUG Darmstadt, CyberLand, SpeaKonf, Tech2Talk
+- JavaLand, Java Forum Nord, XP-Days, ...
 
+[[file:images/falk.jpg]]
 
 * Mike Sperber
 
@@ -24,8 +27,11 @@ Active Group GmbH
 - Projektentwicklung, Beratung, Training
 - Scala, Clojure, F#, Haskell, OCaml, Erlang, Elixir, Swift
 - iSABQ Foundation, FUNAR, FLEX, DSL
-  
+
 Blog [[https://funktionale-programmierung.de]]
+
+[[file:images/mike.jpg]]
+
 
 * BOB 2025
 
@@ -33,9 +39,71 @@ Blog [[https://funktionale-programmierung.de]]
 
 https://bobkonf.de/
 
-* Hätte, hätte Fahrradkette
+* Warum sind wir hier?
+    :PROPERTIES:
+    :reveal_background: ./images/fahrradkette.jpg
+    :reveal_background_trans: slide
+    :reveal_background_opacity: 0.2
+    :END:
 
-Warum sind wir hier?
+- Java wird 30
+- Wie ist Java entstanden?
+- Wie entwickelt es sich gerade weiter?
+- Was könnte noch kommen?
+
+#+BEGIN_NOTES
+https://pixabay.com/de/photos/fahrradkette-verrostet-alt-4788473/
+#+END_NOTES
+
+** Abstract
+
+Java ist inzwischen 30 Jahre alt, und hat seit der Geburt viele Features dazubekommen.
+Die meisten davon wurden nicht vom JDK-Team erfunden, sondern aus anderen Programmiersprachen und Forschungsarbeiten angepasst übernommen.
+
+Durch die mittlerweile halbjährlichen Releases gibt es aktuell viel Bewegung im Java Ökosystem.
+Und die nächste tolle Funktion gibt es höchstwahrscheinlich schon irgendwo da draußen.
+Aber wisst Ihr eigentlich, woher die Features der Vergangenheit kommen?
+Und können wir vielleicht jetzt schon vorhersehen, was die Zukunft bringen wird?
+
+#+REVEAL: split
+
+Im Vortrag werfen Falk (Java-Enthusiast) und Mike (Experte für Programmiersprachen) einen Blick in die Geschichte und in die Glaskugel:
+
+- Was haben Generics, Lambdas, Streams und Virtual Threads gemeinsam?
+- Warum nerven funktionale Programmierer:innen immer wegen der “tail calls”?
+- Warum heißen Lambdas so und was fehlt, damit sie richtig toll werden?
+- Was sind in Monaden und wo gibt’s die in Java?
+- Ist Java mit Lambdas, Stream API und Pattern Matching schon eine funktionale Sprache?
+- Ist Kotlin das Java der Zukunft?
+- … und noch einiges mehr.
+
+
+* Meilensteine von Java
+
+- 1995: 1.0
+- 2004: 5.0 (Generics)
+- 2014: 8 (Lambdas, Stream API, ...)
+- 2017: 9 (JPMS, ...)
+- 2018: 10 (halbjährliches Releases)
+- 2021: 17 (Pattern Matching, ...)
+- 2023: 21 (Virtual Threads, ...)
+
+** Warum ist Java immer noch so populär?
+
+- halbjährliche Releases seit Java 10 (2018)
+- LTS alle 2 Jahre
+- Inkubator und Preview Features
+- große Änderungen auf viele Releases verteilt
+
+** Inspiriert durch ...
+
+Algol60 -> Algol68 -> Pascal -> C -> Java
+
+statische Typsysteme: HOPE und ML -> Miranda -> Haskell/OCaml/F#
+
+#+BEGIN_NOTES
+frühe OO-Sprachen waren ungetypt: Smalltalk, C++
+#+END_NOTES
 
 * Lambda
 
@@ -119,7 +187,7 @@ interface Function<T,R> {
     default <V> Function<T,V> andThen(Function<? super R,? extends V> after);
     R apply(T t)
     default <V> Function<V,R> compose(Function<? super V,? extends T> before)
-    static <T> Function<T,T> identity()    
+    static <T> Function<T,T> identity()
 }
 
 interface DoubleFunction<R> {
@@ -249,6 +317,8 @@ String value = list.get(0);  // Kein Cast nötig
 Warum gibt es keine Generics für primitive Typen?
 
 Type Erasure: Einschränkung oder Vorteil?
+
+
 #+END_NOTES
 
 ** Generics
