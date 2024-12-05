@@ -238,16 +238,6 @@ FIXME
 * Typen
 ** Generics
 
-Gab's nicht schon immer
-
-** Warum kein ArrayList=<int>=
-
-C++
-
-Warum anders als C++?
-
-uniforme Repräsentation
-
 #+begin_src java
 List<String> list = new ArrayList<>();
 list.add("Hello");
@@ -260,6 +250,45 @@ Warum gibt es keine Generics für primitive Typen?
 
 Type Erasure: Einschränkung oder Vorteil?
 #+END_NOTES
+
+** Generics
+
+[[file:images/gj.png]]
+
+** Warum kein ArrayList=<int>=?
+
+#+begin_src java
+class LinkedList<A> {
+    protected class Node {
+        A elt;
+        Node next = null;
+
+        Node(A elt) {
+            this.elt = elt;
+        }
+    }
+    protected Node head = null, tail = null;
+    ...
+}
+#+end_src
+
+** Type Erasure
+
+#+begin_src java
+class LinkedList implements Collection {
+    protected class Node {
+        Object elt;
+        Node next = null;
+
+        Node (Object elt) {
+            this.elt = elt;
+        }
+    }
+    protected Node head = null, tail = null;
+    ...
+}
+#+end_src
+
 
 *** Strachey
 
