@@ -218,11 +218,21 @@ private TimeZone extractCalendarTimeZoneComponent(Calendar cal, TimeZone calTz) 
 
 [[file:images/landin-closure.png]]
 
-** Lambda für funktionale Interfaces (F)
+** Lambda für funktionale Interfaces, als Callbacks, (F)
 
 #+begin_src java
 Function<Integer, Integer> square = x -> x * x;
 System.out.println(square.apply(5));  // 25
+
+
+void processData(List<Integer> data, Consumer<Integer> callback) {
+    data.forEach(callback);
+}
+processData(List.of(1, 2, 3), value -> System.out.println("Processed: " + value));
+
+// Currying
+Function<Integer, Function<Integer, Integer>> add = x -> y -> x + y;
+System.out.println(add.apply(5).apply(3));  // 8
 #+end_src
 
 
@@ -289,22 +299,7 @@ double inc 7
 - Statements vs. Ausdrücke
 - =yield= vs. =return=
 
-* Listen / Streams
-
-#+begin_src java
-#+end_src
-
-#+begin_src java
-#+end_src
-
-
-#+BEGIN_NOTES
-Falk: Lambdas wurden ja in Java 8 eingeführt, um die Programmierung
-mit Streams zu unterstützen.  Kommen die Streams auch aus der
-Lisp-Ecke?
-#+END_NOTES
-
-** Stream API
+* Java 8: Streams (F)
 
 #+begin_src java
 List<String> names = List.of("Alice", "Bob", "Charlie");
@@ -314,9 +309,25 @@ List<String> filtered = names.stream()
 System.out.println(filtered);  // [Alice]
 #+end_src
 
-#+BEGIN_NOTES
-Performance und Debugging: Vorteil oder Frust?
+Default Methods:
 
+#+begin_src java
+interface Animal {
+    default void eat() {
+        System.out.println("Eating...");
+    }
+}
+class Dog implements Animal {}
+new Dog().eat();  // Eating...
+#+end_src
+
+#+BEGIN_NOTES
+Falk: Lambdas wurden ja in Java 8 eingeführt, um die Programmierung
+mit Streams zu unterstützen.  Kommen die Streams auch aus der
+Lisp-Ecke?
+
+
+Performance und Debugging: Vorteil oder Frust?
 Vergleich mit funktionalen Paradigmen.
 #+END_NOTES
 
@@ -328,7 +339,7 @@ Vergleich mit funktionalen Paradigmen.
 
 [[file:images/lisp-maplist.png]]
 
-** List.of() (unmodifiable)
+** Java 9: List.of() - unmodifiable (F)
 
 #+begin_src java
 List<String> immutableList = List.of("A", "B", "C");
@@ -345,18 +356,46 @@ FIXME
 
 *** Eigenschaften
 
-** sequenced collections
+** Java 21 Sequenced Collections (F)
+
+#+ATTR_HTML: :height 500px;
+[[file:images/sequenced_collections.jpg]]
+
+#+REVEAL: split
 
 #+begin_src java
+List<Integer> list = new ArrayList<>(List.of(1, 2, 3, 4, 5));
+List<Integer> reversed = list.reversed();
+System.out.println(reversed); // 5, 4, 3, 2, 1
+
+list.addFirst(0);
+list.addLast(6);
+
+System.out.println(list.getFirst()); // 0
+System.out.println(list.getLast()); // 6
 #+end_src
 
 #+BEGIN_NOTES
 #+END_NOTES
 
-** stream gatherers
+** Java 22/24: Stream Gatherers (F)
 
 #+begin_src java
+// will contain: [[1, 2, 3], [4, 5, 6], [7]]
+List<List<Integer>> windows = Stream.of(1, 2, 3, 4, 5, 6, 7)
+  .gather(Gatherers.windowFixed(3))
+  .toList();
+System.out.println(windows);
+
+// will contain: Optional["12345"]
+Optional<String> numberString =
+  Stream.of(1, 2, 3, 4, 5)
+   .gather(Gatherers.fold(() -> "",
+     (string, number) -> string + number))
+   .findFirst();
+System.out.println(numberString);
 #+end_src
+
 
 #+BEGIN_NOTES
 #+END_NOTES
@@ -513,7 +552,12 @@ class B extends A {}
 ...
 #+end_src
 
-** Optional
+** Java 8: Optional (F)
+
+#+begin_src java
+Optional<String> name = Optional.of("Alice");
+name.ifPresent(System.out::println);  // Alice
+#+end_src
 
 #+BEGIN_NOTES
 Mike: Übrigens, Falk, wo wir gerade bei ML sind, das hier kommt auch von da
@@ -574,7 +618,33 @@ CREATE TABLE orders
 
 ** Records
 
-FIXME
+#+begin_src java
+record Point(int x, int y) {}
+
+Point p = new Point(1, 2);
+System.out.println(p.x());
+#+end_src
+
+#+REVEAL: split
+
+#+begin_src java
+public record MonetaryAmount(BigDecimal value, 	Currency currency) {}
+#+end_src
+
+Im Bytecode:
+
+#+begin_src sh
+javap MonetaryAmount.class
+Compiled from "MonetaryAmount.java"
+public final class de.sippsack.records.MonetaryAmount extends java.lang.Record {
+  public de.sippsack.records.MonetaryAmount(java.math.BigDecimal, java.util.Currency);
+  public final java.lang.String toString();
+  public final int hashCode();
+  public final boolean equals(java.lang.Object);
+  public java.math.BigDecimal value();
+  public java.util.Currency currency();
+}
+#+end_src
 
 #+BEGIN_NOTES
 Falk: Dann müßtest Du ja Records toll finden, das ist ja sowas wie
