@@ -350,6 +350,16 @@ Flexibilität vs. Interface-Verschmutzung.
 Hätte man Mixins einführen sollen?
 #+END_NOTES
 
+** Default Methods in Haskell
+
+#+begin_src haskell
+class  Eq a  where
+    (==), (/=)           :: a -> a -> Bool
+
+    x /= y               = not (x == y)
+    x == y               = not (x /= y)
+#+end_src
+
 ** Java 9: List.of() - unmodifiable (F)
 
 #+begin_src java
