@@ -359,26 +359,46 @@ class LinkedList implements Collection {
 }
 #+end_src
 
+** Parametrische Polymorphie
 
-*** Strachey
+[[file:images/strachey.png]]
+
+** Strachey, 1967
 
 [[file:images/parametric-polymorphism.png]]
 
-** Type Erasure
+** ML
+
+[[file:images/milner.png]]
+
+** Type Erasure blöd
+
+** Parametricity
 
 #+begin_src java
-class ArrayList<T> {
-    T sum() {
-        if (T instanceof Integer)
-          ...
-        else if (T instanceof Double)
-          ...
-        ...        
-    }
+interface Stream<T> {
+    <U> Stream<U> map(Function<T, U> f);
 }
 #+end_src
 
-Fahrradkette:
+** Hätte, Hätte
+
+"Cannot access class object of a type parameter"
+
+#+begin_src java
+public <T> T sum(ArrayList<T> list) {
+if (T.class == Integer.class) {
+    int result = 0;
+    ...
+    return new result;
+} else if (T.class == Float.class) {
+    float result = 0;
+    ...
+    return result;
+}
+#+end_src
+
+** Fahrradkette
 
 #+begin_src java
 interface NumOps<T> {
@@ -398,16 +418,6 @@ class ArrayList<T> {
 }
 #+end_src
 
-** Parametricity
-
-#+begin_src java
-interface Stream<T> {
-    <U> Stream<U> map(Function<T, U> f);
-}
-#+end_src
-
--> Typklassen/Implicits
-
 ** Local variable type inference
 
 #+begin_src java
@@ -419,6 +429,10 @@ var list = Lists.of(new Foo());
 #+BEGIN_NOTES
 #+END_NOTES
 
+** Damas/Milner 1982
+
+[[file:images/damas-milner.png]]
+
 ** Warum hat das so lange gedauert?
 
 #+begin_src java
@@ -427,10 +441,6 @@ interface Stream<R> {
 }
 #+end_src
 
-- nominale vs. strukturelle Typsysteme ... Arrays
-
-- Löcher im Typsystem
-
 #+begin_src java
 class A { }
 class B extends A {}
@@ -438,14 +448,9 @@ class B extends A {}
 ...
     A[] as = new B[10];
     A a = as[0];
-    B b = ...;
-    as[0] = b;
+    as[0] = new A();
 ...
 #+end_src
-
-** ML / Hindley/Milner/Damas
-
-FIXME
 
 ** Optional
 
@@ -464,7 +469,7 @@ Optional<String> name = Optional.of("Alice");
 name.ifPresent(System.out::println);  // Alice
 #+END_NOTES
 
-*** Optional
+** Optional
 
 Haskell
 
@@ -488,13 +493,23 @@ type 'a t = 'a option =
 
 (SML/NJ 1993)
 
-** nullable types
+** Nullable Types
 
 #+begin_src java
 #+end_src
 
 #+BEGIN_NOTES
 #+END_NOTES
+
+** SQL, 1974
+
+#+begin_src sql
+CREATE TABLE orders
+( order_id int NOT NULL,
+  customer_id int,
+  order_date date,
+);
+#+end_src
 
 ** Records
 
@@ -507,17 +522,17 @@ algebraische Datentypen in Haskell.
 
 #+end_src
 
-*** ALGOL W (1966)
+** ALGOL W (1966)
 
 [[file:images/algol-w.png]]
 
-*** ALGOL W
+** ALGOL W
 
 [[file:images/algol-w-record.png]]
 
-*** Luca Cardelli, ML
+** Alles über Daten und Typen, 1985
 
-FIXME
+[[file:images/cardelli-wegner.png]]
 
 ** Sealed Classes
 
