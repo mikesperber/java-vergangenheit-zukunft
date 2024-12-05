@@ -316,11 +316,11 @@ html, body {
   content: "";
   display: block;
   background: url("logo.svg") left top no-repeat;
-  width: 220px;
+  width: 420px;
   height: 80px;
   bottom: 15px;
   right: 4em;
-  background-size: 220px 80px;
+  background-size: 400px 80px;
   z-index: 9999; }
 
 .reveal pre {
