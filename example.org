@@ -325,7 +325,7 @@ Type Erasure: Einschränkung oder Vorteil?
 
 [[file:images/gj.png]]
 
-** Warum kein ArrayList=<int>=?
+** Warum kein =ArrayList<int>=?
 
 #+begin_src java
 class LinkedList<A> {
@@ -534,49 +534,65 @@ algebraische Datentypen in Haskell.
 
 [[file:images/cardelli-wegner.png]]
 
+** Functional Update
+
+#+begin_src haskell
+data Dillo = MkDillo { dilloLiveness :: Liveness,
+                       dilloWeight :: Weight }
+
+runOverDillo dillo = dillo { dilloLiveness = Dead }
+#+end_src
+
 ** Sealed Classes
 
 #+begin_src java
+sealed interface Animal {
+    record Dillo(Liveness liveness, Weight weight)
+      implements Animal {}
+    record Parrot(String sentence, Weight weight)
+      implements Animal {}
+}
 #+end_src
 
 #+BEGIN_NOTES
 #+END_NOTES
 
-*** Haskell
+** Haskell
 
 #+begin_src haskell
-data FIXME
+data Animal =
+    MkDillo { dilloLiveness :: Liveness, dilloWeight :: Weight }
+  | MkParrot { parrotSentence:: String, parrotWeight :: Weight }
+  deriving Show
 #+end_src
 
-*** CLU
-
-[[file:images/clu.png]]
-
-https://pmg.csail.mit.edu/ftp.lcs.mit.edu/pub/pclu/CLU/3.Documents/MIT-LCS-TR-225.pdf
-
-*** CLU (1979)
-
-[[file:images/clu-oneof.png]]
-
-*** HOPE (1980)
-
-[[file:images/hope.png]]
-
-https://publications.csail.mit.edu/lcs/pubs/pdf/MIT-LCS-TR-225.pdf
-
-*** HOPE
-
-[[file:images/hope-data.png]]
-
-*** ISWIM
+** ISWIM
 
 [[file:images/iswim.png]]
 
 https://dl.acm.org/doi/10.1145/365230.365257
 
-*** ISWIM
+** ISWIM
 
 [[file:images/iswim-adt.png]]
+
+** CLU
+
+[[file:images/clu.png]]
+
+https://pmg.csail.mit.edu/ftp.lcs.mit.edu/pub/pclu/CLU/3.Documents/MIT-LCS-TR-225.pdf
+
+** CLU (1979)
+
+[[file:images/clu-oneof.png]]
+
+** HOPE (1980)
+
+[[file:images/hope.png]]
+
+** HOPE
+
+[[file:images/hope-data.png]]
 
 ** value types
 
@@ -586,6 +602,7 @@ https://dl.acm.org/doi/10.1145/365230.365257
 #+BEGIN_NOTES
 #+END_NOTES
 * Pattern-Matching
+
 ** switch expressions
 
 #+begin_src java
@@ -660,7 +677,7 @@ class Dog implements Animal {}
 new Dog().eat();  // Eating...
 #+end_src
 
-#+BEGIN_NOTES^
+#+BEGIN_NOTES
 Flexibilität vs. Interface-Verschmutzung.
 
 Hätte man Mixins einführen sollen?
