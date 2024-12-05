@@ -631,6 +631,8 @@ type 'a t = 'a option =
 
 ** Nullable Types
 
+JEP draft: Null-Restricted and Nullable Types
+
 #+begin_src java
 #+end_src
 
