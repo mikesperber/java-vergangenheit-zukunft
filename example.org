@@ -193,7 +193,8 @@ Java
 ** "Variable used in lambda expression should be final or effectively final"
 
 #+begin_src java
-private TimeZone extractCalendarTimeZoneComponent(Calendar cal, TimeZone calTz) {
+private TimeZone
+ extractCalendarTimeZoneComponent(Calendar cal, TimeZone calTz) {
     try {
         cal.getComponents().getComponents("VTIMEZONE")
           .forEach(component -> {
@@ -210,7 +211,7 @@ private TimeZone extractCalendarTimeZoneComponent(Calendar cal, TimeZone calTz) 
 }
 #+end_src
 
-** Was sind Closures?
+** Closures
 
 [[file:images/landin-evaluation.png]]
 
@@ -259,7 +260,7 @@ interface DoubleFunction<R> {
 ** Methoden als Objekte
 
 #+begin_src java
-int double(Function<Integer, Integer> f, int n) {
+int twice(Function<Integer, Integer> f, int n) {
    return f.apply(f.apply(n));
 }
 
@@ -267,7 +268,7 @@ static Integer inc(Integer n) {
     return n + 1;
 }
 
-... double(::inc, 7) ...
+... twice(::inc, 7) ...
 #+end_src
 
 ** Funktionstypen
@@ -281,11 +282,11 @@ var inc = (int x) -> x + 1;
 ** Funktionen in Haskell
 
 #+begin_src haskell
-(.) :: (b -> c) -> (a -> b) -> (b -> c)
+(.) :: (b -> c) -> (a -> b) -> (a -> c)
 f . g = \ a -> f (g a)
 
-double :: (Integer -> Integer) -> Integer -> Integer
-double f n = f (f n)
+twice :: (Integer -> Integer) -> Integer -> Integer
+twice f n = f (f n)
 
 inc :: Integer -> Integer
 inc n = n + 1
@@ -293,11 +294,11 @@ inc n = n + 1
 double inc 7
 #+end_src
 
-** Weitere Nahstellen
+** Weitere Nahtstellen
 
 - =void=
 - Statements vs. Ausdrücke
-- =yield= vs. =return=
+- =return=
 
 * Java 8: Streams (F)
 
@@ -965,9 +966,8 @@ switch (value) {
 
 * Was gab's noch
 
-- Futures
-- /default methods/
 - Modulsystem
+- Futures
 - virtuelle Threads
 - /structured concurrency/
 - /scoped values/
@@ -997,12 +997,15 @@ Java
 
 ** Woher
 
-| defaultmethods         | Haskell    | FP      |  1991 |
+| default methods        | Haskell    | FP      |  1991 |
 | Generics               | ML         | FP      |  1977 |
 | Lambda                 | LISP       | FP      |  1959 |
 | Listen/map             | LISP       | FP      |  1960 |
 | Stream Gatherers       | Haskell    | FP      |  2005 |
 | Typinferenz            | ML         | FP      |  1977 |
+
+** Woher
+
 | Records                | ALGOL W/ML | PROC/FP |  1966 |
 | Sealed Interfaces      | ML/Haskell | FP      |  1980 |
 | Futures                | Scheme     | FP      |  1976 |
@@ -1035,15 +1038,13 @@ map (+1) [1,2,3,4,5,6]
 
 #+begin_src haskell
 div_mod :: Integer -> Integer -> (Integer, Integer)
-div_mod a b = (a `div` b, a `mod b`)
+div_mod a b = (a `div` b, a `mod` b)
 #+end_src
 
 ** Either
 
 #+begin_src haskell
-data Either a b
-  = Left a
-  | Right b 
+data Either a b = Left a | Right b 
 
 data ParseDigitError
   = NotADigit Char
@@ -1075,6 +1076,8 @@ rec (x:xs) acc = rev xs (x:acc)
 ** Tail Calls
 
 [[file:images/guy-steele-tail-calls.png]]
+
+https://www.youtube.com/watch?v=0hlBkQ5DjaY
 
 ** Scheme, Tail Calls
 
