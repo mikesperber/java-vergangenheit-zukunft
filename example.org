@@ -22,15 +22,17 @@ Softwarearchitekt bei embarc
 - (Co-)Organisator von JUG Darmstadt, CyberLand, SpeaKonf, Tech2Talk
 - JavaLand, Java Forum Nord, XP-Days, ...
 
-* Mike Sperber
+** Mike Sperber
 
-Active Group GmbH
+Geschäftsführer Active Group GmbH
+
+Universität Tübingen 1995-2003, Bereich Programmiersprachen und Übersetzerbau
 
 =@sperbsen@discuss.systems=
 
 [[file:images/mike.jpg]]
 
-* Active Group GmbH
+** Active Group GmbH
 
 #+ATTR_HTML: :height 100px;
 [[file:images/ag-logo-plain.png][file:images/ag-logo-plain.png]]
@@ -41,11 +43,7 @@ Active Group GmbH
 
 Blog [[https://funktionale-programmierung.de]]
 
-* BOB 2025
-
-[[file:images/bob_head_2to1.png]]
-
-https://bobkonf.de/
+Konferenz https://bobkonf.de/
 
 * Warum sind wir hier? (F)
     :PROPERTIES:
@@ -92,7 +90,7 @@ Im Vortrag werfen Falk (Java-Enthusiast) und Mike (Experte für Programmiersprac
 - … und noch einiges mehr.
 
 
-* Meilensteine von Java (F)
+** Meilensteine von Java (F)
 
 - 1995: 1.0
 - 2004: 5.0 (Generics)
@@ -101,13 +99,6 @@ Im Vortrag werfen Falk (Java-Enthusiast) und Mike (Experte für Programmiersprac
 - 2018: 10 (halbjährliches Releases)
 - 2021: 17 (Pattern Matching, ...)
 - 2023: 21 (Virtual Threads, ...)
-
-** Warum ist Java immer noch so populär? (F)
-
-- halbjährliche Releases seit Java 10 (2018)
-- LTS alle 2 Jahre
-- Inkubator und Preview Features
-- große Änderungen auf viele Releases verteilt
 
 ** Inspiriert durch ...
 
@@ -119,22 +110,10 @@ Im Vortrag werfen Falk (Java-Enthusiast) und Mike (Experte für Programmiersprac
 frühe OO-Sprachen waren ungetypt: Smalltalk, C++
 #+END_NOTES
 
-* Lambda (F)
 
-#+begin_src java
-Runnable r = () -> System.out.println("Hello from Lambda!");
-new Thread(r).start();
-#+end_src
+* Lambda
 
-#+BEGIN_NOTES
-Warum keine Tail-Call-Optimierung?
-
-Fehlende Unterstützung für Mehrzeiler.
-#+END_NOTES
-
-** Lambdas als Parameter (F)
-
-Higher Order Functions:
+** Higher Order Functions
 
 #+begin_src java
 List<String> names = List.of("Alice", "Bob", "Charlie");
@@ -147,13 +126,12 @@ List<String> upperCaseNames = names.stream()
 System.out.println(upperCaseNames);  // [ALICE, BOB, CHARLIE]
 #+end_src
 
-Methodenreferenz:
+** Methodenreferenzen
 
 #+begin_src java
 List<String> names = List.of("Alice", "Bob", "Charlie");
 names.forEach(System.out::println);
 #+end_src
-
 
 ** McCarthy, 1960
 
@@ -172,53 +150,6 @@ names.forEach(System.out::println);
 
 [[file:images/church-lambda.png]]
 
-** Warum hat das so lang gedauert?
-
-**FP**
-LISP (1960) ->
-ML (1973) / Scheme (1975) / HOPE (1980) ->
-Haskell/OCaml/F# (ab 1985)
-
-**PROC**
-Algol 60 ->
-Pascal (1970) ->
-C (1972)
-
-**OOP**
-Simula 67 ->
-Smalltalk 80 ->
-C++ (1985) ->
-Java
-
-** "Variable used in lambda expression should be final or effectively final"
-
-#+begin_src java
-private TimeZone
- extractCalendarTimeZoneComponent(Calendar cal, TimeZone calTz) {
-    try {
-        cal.getComponents().getComponents("VTIMEZONE")
-          .forEach(component -> {
-            VTimeZone v = (VTimeZone) component;
-            v.getTimeZoneId();
-            if (calTz == null) {
-                calTz = TimeZone.getTimeZone(v.getTimeZoneId().getValue());
-            }
-        });
-    } catch (Exception e) {
-        log.warn("Unable to determine ical timezone", e);
-    }
-    return null;
-}
-#+end_src
-
-** Closures
-
-[[file:images/landin-evaluation.png]]
-
-** Landin, 1964
-
-[[file:images/landin-closure.png]]
-
 ** Lambda für funktionale Interfaces, als Callbacks, (F)
 
 #+begin_src java
@@ -236,27 +167,6 @@ Function<Integer, Function<Integer, Integer>> add = x -> y -> x + y;
 System.out.println(add.apply(5).apply(3));  // 8
 #+end_src
 
-
-** Warum gibt es 51 Interfaces in =java.util.function=?
-
-[[file:images/java-util-function.png]]
-
-** Generics und primitive Typen
-
-#+begin_src java
-
-interface Function<T,R> {
-    default <V> Function<T,V> andThen(Function<? super R,? extends V> after);
-    R apply(T t)
-    default <V> Function<V,R> compose(Function<? super V,? extends T> before)
-    static <T> Function<T,T> identity()
-}
-
-interface DoubleFunction<R> {
-    R apply(double value);
-}
-#+end_src
-
 ** Methoden als Objekte
 
 #+begin_src java
@@ -271,36 +181,7 @@ static Integer inc(Integer n) {
 ... twice(::inc, 7) ...
 #+end_src
 
-** Funktionstypen
-
-"Cannot infer type"
-
-#+begin_src java
-var inc = (int x) -> x + 1;
-#+end_src
-
-** Funktionen in Haskell
-
-#+begin_src haskell
-(.) :: (b -> c) -> (a -> b) -> (a -> c)
-f . g = \ a -> f (g a)
-
-twice :: (Integer -> Integer) -> Integer -> Integer
-twice f n = f (f n)
-
-inc :: Integer -> Integer
-inc n = n + 1
-
-double inc 7
-#+end_src
-
-** Weitere Nahtstellen
-
-- =void=
-- Statements vs. Ausdrücke
-- =return=
-
-* Java 8: Streams (F)
+** Streams
 
 #+begin_src java
 List<String> names = List.of("Alice", "Bob", "Charlie");
@@ -333,122 +214,90 @@ Vergleich mit funktionalen Paradigmen.
 
 [[file:images/lisp-maplist.png]]
 
-** Java 8: Default Methods (F)
+** "Variable used in lambda expression should be final or effectively final"
 
 #+begin_src java
-interface Animal {
-    default void eat() {
-        System.out.println("Eating...");
+private TimeZone
+ extractCalendarTimeZoneComponent(Calendar cal, TimeZone calTz) {
+    try {
+        cal.getComponents().getComponents("VTIMEZONE")
+          .forEach(component -> {
+            VTimeZone v = (VTimeZone) component;
+            v.getTimeZoneId();
+            if (calTz == null) {
+                calTz = TimeZone.getTimeZone(v.getTimeZoneId().getValue());
+            }
+        });
+    } catch (Exception e) {
+        log.warn("Unable to determine ical timezone", e);
     }
+    return null;
 }
-class Dog implements Animal {}
-new Dog().eat();  // Eating...
 #+end_src
 
-#+BEGIN_NOTES
-Flexibilität vs. Interface-Verschmutzung.
+** Closures
 
-Hätte man Mixins einführen sollen?
-#+END_NOTES
+[[file:images/landin-evaluation.png]]
 
-** Default Methods in Haskell
+** Landin, 1964
+
+[[file:images/landin-closure.png]]
+
+** Warum hat das so lang gedauert?
+
+**FP**
+LISP (1960) ->
+ML (1973) / Scheme (1975) / HOPE (1980) ->
+Haskell/OCaml/F# (ab 1985)
+
+**PROC**
+Algol 60 ->
+Pascal (1970) ->
+C (1972)
+
+**OOP**
+Simula 67 ->
+Smalltalk 80 ->
+C++ (1985) ->
+Java
+
+** Ausblick
+
+FIXME: Continuations, tail calls
+
+** Continuations
+
+FIXME
+
+** Tail Calls
 
 #+begin_src haskell
-class  Eq a  where
-    (==), (/=)           :: a -> a -> Bool
-
-    x /= y               = not (x == y)
-    x == y               = not (x /= y)
+rev [] acc = acc
+rec (x:xs) acc = rev xs (x:acc)
 #+end_src
 
-** Java 9: List.of() - unmodifiable (F)
+** Tail Calls
 
-#+begin_src java
-List<String> immutableList = List.of("A", "B", "C");
-// immutableList.add("D");  // UnsupportedOperationException
-#+end_src
+[[file:images/guy-steele-tail-calls.png]]
 
-#+BEGIN_NOTES
-Warum keine echten Literals wie in Python oder Kotlin?
-#+END_NOTES
+https://www.youtube.com/watch?v=0hlBkQ5DjaY
 
-** HOPE
+** Scheme, Tail Calls
 
-[[file:images/hope-list.png]]
+[[file:images/ltu.png]]
 
-** Java 21 Sequenced Collections (F)
+** Guy Steele
 
-#+ATTR_HTML: :height 500px;
-[[file:images/sequenced_collections.jpg]]
+[[file:images/guy-steele-java.png]]
 
-#+REVEAL: split
 
-#+begin_src java
-List<Integer> list = new ArrayList<>(List.of(1, 2, 3, 4, 5));
-List<Integer> reversed = list.reversed();
-System.out.println(reversed); // 5, 4, 3, 2, 1
 
-list.addFirst(0);
-list.addLast(6);
-
-System.out.println(list.getFirst()); // 0
-System.out.println(list.getLast()); // 6
-#+end_src
-
-#+BEGIN_NOTES
-#+END_NOTES
-
-** Java 22/24: Stream Gatherers (F)
-
-#+begin_src java
-// will contain: [[1, 2, 3], [4, 5, 6], [7]]
-List<List<Integer>> windows = Stream.of(1, 2, 3, 4, 5, 6, 7)
-  .gather(Gatherers.windowFixed(3))
-  .toList();
-System.out.println(windows);
-
-// will contain: Optional["12345"]
-Optional<String> numberString =
-  Stream.of(1, 2, 3, 4, 5)
-   .gather(Gatherers.fold(() -> "",
-     (string, number) -> string + number))
-   .findFirst();
-System.out.println(numberString);
-#+end_src
-
-#+BEGIN_NOTES
-#+END_NOTES
-
-** Java 22/24: Stream Gatherers (F)
-
-#+begin_src java
-interface Gatherer<T, A, R> {
-    default Supplier<A> initializer() {
-        return defaultInitializer();
-    };
-
-    Integrator<A, T, R> integrator();
-
-    default BinaryOperator<A> combiner() {
-        return defaultCombiner();
-    }
-
-    default BiConsumer<A, Downstream<? super R>> finisher() {
-        return defaultFinisher();
-    };
-}
-#+end_src
-
-#+BEGIN_NOTES
-A gatherer is defined by four functions that work together:
-The optional initializer function provides an object that maintains private state while processing stream elements. For example, a gatherer can store the current element so that, the next time it is applied, it can compare the new element with the now-previous element and, say, emit only the larger of the two. In effect, such a gatherer transforms two input elements into one output element.
-The integrator function integrates a new element from the input stream, possibly inspecting the private state object and possibly emitting elements to the output stream. It can also terminate processing before reaching the end of the input stream; for example, a gatherer searching for the largest of a stream of integers can terminate if it detects Integer.MAX_VALUE.
-The optional combiner function can be used to evaluate the gatherer in parallel when the input stream is marked as parallel. If a gatherer is not parallel-capable then it can still be part of a parallel stream pipeline, but it is evaluated sequentially. This is useful for cases where an operation is inherently ordered in nature and thus cannot be parallelized.
-The optional finisher function is invoked when there are no more input elements to consume. This function can inspect the private state object and, possibly, emit additional output elements. For example, a gatherer searching for a specific element amongst its input elements can report failure, say by throwing an exception, when its finisher is invoked.
-#+END_NOTES
 
 * Typen
+
 ** Generics
+
+FIXME: besseres Beispiel
 
 #+begin_src java
 List<String> list = new ArrayList<>();
@@ -468,6 +317,26 @@ Type Erasure: Einschränkung oder Vorteil?
 ** Generics
 
 [[file:images/gj.png]]
+
+** Parametrische Polymorphie
+
+[[file:images/strachey.png]]
+
+** Parametricity
+
+#+begin_src java
+interface Stream<T> {
+    <U> Stream<U> map(Function<T, U> f);
+}
+#+end_src
+
+** Strachey, 1967
+
+[[file:images/parametric-polymorphism.png]]
+
+** ML
+
+[[file:images/milner.png]]
 
 ** Warum kein =ArrayList<int>=?
 
@@ -503,63 +372,35 @@ class LinkedList implements Collection {
 }
 #+end_src
 
-** Parametrische Polymorphie
+** Funktionstypen
 
-[[file:images/strachey.png]]
+FIXME: Mehr Intro
 
-** Strachey, 1967
-
-[[file:images/parametric-polymorphism.png]]
-
-** ML
-
-[[file:images/milner.png]]
-
-** Parametricity
+"Cannot infer type"
 
 #+begin_src java
-interface Stream<T> {
-    <U> Stream<U> map(Function<T, U> f);
+var inc = (int x) -> x + 1;
+#+end_src
+
+** Generics und primitive Typen
+
+#+begin_src java
+
+interface Function<T,R> {
+    default <V> Function<T,V> andThen(Function<? super R,? extends V> after);
+    R apply(T t)
+    default <V> Function<V,R> compose(Function<? super V,? extends T> before)
+    static <T> Function<T,T> identity()
+}
+
+interface DoubleFunction<R> {
+    R apply(double value);
 }
 #+end_src
 
-** Hätte, Hätte
+** =java.util.function=
 
-"Cannot access class object of a type parameter"
-
-#+begin_src java
-public <T> T sum(ArrayList<T> list) {
-    if (T.class == Integer.class) {
-	int result = 0;
-	...
-	return new result;
-    } else if (T.class == Float.class) {
-	float result = 0;
-	...
-	return result;
-    } else ...
-}
-#+end_src
-
-** Fahrradkette
-
-#+begin_src java
-interface NumOps<T> {
-    T zero();
-    T plus(T t1, T t2);
-    ...
-}
-    
-class ArrayList<T> {
-    T sum(automatic NumOps<T> ops) {
-       T result = ops.zero();
-       for (T element: this) {
-          result = ops.plus(result, element);
-       }
-       return result;
-    }
-}
-#+end_src
+[[file:images/java-util-function.png]]
 
 ** Local variable type inference
 
@@ -595,171 +436,91 @@ class B extends A {}
 ...
 #+end_src
 
-** Java 8: Optional (F)
+** Ausblick
 
-#+begin_src java
-Optional<String> name = Optional.of("Alice");
-name.ifPresent(System.out::println);  // Alice
-#+end_src
+FIXME
 
-#+BEGIN_NOTES
-Mike: Übrigens, Falk, wo wir gerade bei ML sind, das hier kommt auch von da
-#+END_NOTES
+- Funktionstypen
+- value types
+- Implicits
+- higher-kinded types
 
-** Optional
-
-Haskell
+** Funktionstypen in Haskell
 
 #+begin_src haskell
-data Maybe a = Nothing | Just a
+map :: (a -> b) -> [a] -> [b]
+
+(.) :: (b -> c) -> (a -> b) -> (a -> c)
+f . g = \ a -> f (g a)
+
+twice :: (Integer -> Integer) -> Integer -> Integer
+twice f n = f (f n)
+
+inc :: Integer -> Integer
+inc n = n + 1
+
+double inc 7
 #+end_src
 
-Standard ML
+** Uniforme Generics
 
-#+begin_src sml
-datatype 'a option = NONE | SOME of 'a
+#+begin_src haskell
+map (+1) [1,2,3,4,5,6]
 #+end_src
 
-OCaml
 
-#+begin_src ocaml
-type 'a t = 'a option = 
-| None
-| Some of 'a
+** Typklassen/Implicits
+
+#+begin_src haskell
+class Semigroup a where
+  -- combine (combine x y) z == combine x (combine y z)
+  combine :: a -> a -> a
+
+class Semigroup a => Monoid a where
+  -- combine neutral x == combine x neutral == x
+  neutral :: a
+
+foldMonoid :: Monoid b => [b] -> b
+foldMonoid list = foldr combine neutral list
 #+end_src
 
-(SML/NJ 1993)
+** Hätte, Hätte
 
-** Nullable Types
-
-JEP draft: Null-Restricted and Nullable Types
+"Cannot access class object of a type parameter"
 
 #+begin_src java
-#+end_src
-
-#+BEGIN_NOTES
-#+END_NOTES
-
-** SQL, 1974
-
-#+begin_src sql
-CREATE TABLE orders
-( order_id int NOT NULL,
-  customer_id int,
-  order_date date,
-);
-#+end_src
-
-** Records
-
-#+begin_src java
-record Point(int x, int y) {}
-
-Point p = new Point(1, 2);
-System.out.println(p.x());
-#+end_src
-
-#+REVEAL: split
-
-#+begin_src java
-public record MonetaryAmount(BigDecimal value, 	Currency currency) {}
-#+end_src
-
-Im Bytecode:
-
-#+begin_src sh
-javap MonetaryAmount.class
-Compiled from "MonetaryAmount.java"
-public final class de.sippsack.records.MonetaryAmount extends java.lang.Record {
-  public de.sippsack.records.MonetaryAmount(java.math.BigDecimal, java.util.Currency);
-  public final java.lang.String toString();
-  public final int hashCode();
-  public final boolean equals(java.lang.Object);
-  public java.math.BigDecimal value();
-  public java.util.Currency currency();
+public <T> T sum(ArrayList<T> list) {
+    if (T.class == Integer.class) {
+	int result = 0;
+	...
+	return new result;
+    } else if (T.class == Float.class) {
+	float result = 0;
+	...
+	return result;
+    } else ...
 }
 #+end_src
 
-#+BEGIN_NOTES
-Falk: Dann müßtest Du ja Records toll finden, das ist ja sowas wie
-algebraische Datentypen in Haskell.
-#+END_NOTES
+** Fahrradkette: Implicits
 
 #+begin_src java
-
-#+end_src
-
-** ALGOL W (1966)
-
-[[file:images/algol-w.png]]
-
-** ALGOL W
-
-[[file:images/algol-w-record.png]]
-
-** Alles über Daten und Typen, 1985
-
-[[file:images/cardelli-wegner.png]]
-
-** Functional Update
-
-#+begin_src haskell
-data Dillo = MkDillo { dilloLiveness :: Liveness,
-                       dilloWeight :: Weight }
-
-runOverDillo dillo = dillo { dilloLiveness = Dead }
-#+end_src
-
-** Sealed Classes
-
-#+begin_src java
-sealed interface Animal {
-    record Dillo(Liveness liveness, Weight weight)
-      implements Animal {}
-    record Parrot(String sentence, Weight weight)
-      implements Animal {}
+interface NumOps<T> {
+    T zero();
+    T plus(T t1, T t2);
+    ...
+}
+    
+class ArrayList<T> {
+    T sum(automatic NumOps<T> ops) {
+       T result = ops.zero();
+       for (T element: this) {
+          result = ops.plus(result, element);
+       }
+       return result;
+    }
 }
 #+end_src
-
-#+BEGIN_NOTES
-#+END_NOTES
-
-** Haskell
-
-#+begin_src haskell
-data Animal =
-    MkDillo { dilloLiveness :: Liveness, dilloWeight :: Weight }
-  | MkParrot { parrotSentence:: String, parrotWeight :: Weight }
-  deriving Show
-#+end_src
-
-** ISWIM
-
-[[file:images/iswim.png]]
-
-https://dl.acm.org/doi/10.1145/365230.365257
-
-** ISWIM
-
-[[file:images/iswim-adt.png]]
-
-** CLU
-
-[[file:images/clu.png]]
-
-https://pmg.csail.mit.edu/ftp.lcs.mit.edu/pub/pclu/CLU/3.Documents/MIT-LCS-TR-225.pdf
-
-** CLU (1979)
-
-[[file:images/clu-oneof.png]]
-
-** HOPE (1980)
-
-[[file:images/hope.png]]
-
-** HOPE
-
-[[file:images/hope-data.png]]
 
 ** Java ?: Value Types
 
@@ -817,7 +578,162 @@ value record Color(byte red, byte green, byte blue) {
 #+BEGIN_NOTES
 #+END_NOTES
 
-* Pattern-Matching
+
+* Daten
+
+** Java 8: Optional (F)
+
+#+begin_src java
+Optional<String> name = Optional.of("Alice");
+name.ifPresent(System.out::println);  // Alice
+#+end_src
+
+#+BEGIN_NOTES
+Mike: Übrigens, Falk, wo wir gerade bei ML sind, das hier kommt auch von da
+#+END_NOTES
+
+** Optional
+
+Haskell
+
+#+begin_src haskell
+data Maybe a = Nothing | Just a
+#+end_src
+
+Standard ML (SML/NJ 1993)
+
+#+begin_src sml
+datatype 'a option = NONE | SOME of 'a
+#+end_src
+
+OCaml
+
+#+begin_src ocaml
+type 'a t = 'a option = 
+| None
+| Some of 'a
+#+end_src
+
+** Records
+
+#+begin_src java
+record Point(int x, int y) {}
+
+Point p = new Point(1, 2);
+System.out.println(p.x());
+#+end_src
+
+#+REVEAL: split
+
+#+begin_src java
+public record MonetaryAmount(BigDecimal value, 	Currency currency) {}
+#+end_src
+
+Im Bytecode:
+
+#+begin_src sh
+javap MonetaryAmount.class
+Compiled from "MonetaryAmount.java"
+public final class de.sippsack.records.MonetaryAmount extends java.lang.Record {
+  public de.sippsack.records.MonetaryAmount(java.math.BigDecimal, java.util.Currency);
+  public final java.lang.String toString();
+  public final int hashCode();
+  public final boolean equals(java.lang.Object);
+  public java.math.BigDecimal value();
+  public java.util.Currency currency();
+}
+#+end_src
+
+#+BEGIN_NOTES
+Falk: Dann müßtest Du ja Records toll finden, das ist ja sowas wie
+algebraische Datentypen in Haskell.
+#+END_NOTES
+
+#+begin_src java
+
+#+end_src
+
+** ALGOL W (1966)
+
+[[file:images/algol-w.png]]
+
+** ALGOL W
+
+[[file:images/algol-w-record.png]]
+
+** Alles über Daten und Typen, 1985
+
+[[file:images/cardelli-wegner.png]]
+
+** Sealed Classes
+
+#+begin_src java
+sealed interface Animal {
+    record Dillo(Liveness liveness, Weight weight)
+      implements Animal {}
+    record Parrot(String sentence, Weight weight)
+      implements Animal {}
+}
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
+** Haskell
+
+#+begin_src haskell
+data Animal =
+    MkDillo { dilloLiveness :: Liveness, dilloWeight :: Weight }
+  | MkParrot { parrotSentence:: String, parrotWeight :: Weight }
+  deriving Show
+#+end_src
+
+** ISWIM
+
+[[file:images/iswim.png]]
+
+https://dl.acm.org/doi/10.1145/365230.365257
+
+** ISWIM
+
+[[file:images/iswim-adt.png]]
+
+** CLU
+
+[[file:images/clu.png]]
+
+https://pmg.csail.mit.edu/ftp.lcs.mit.edu/pub/pclu/CLU/3.Documents/MIT-LCS-TR-225.pdf
+
+** CLU (1979)
+
+[[file:images/clu-oneof.png]]
+
+** HOPE (1980)
+
+[[file:images/hope.png]]
+
+** HOPE: Algebraische Datentypen
+
+[[file:images/hope-data.png]]
+
+** Summen und Produkte
+
+FIXME: Blog-Post
+
+** Java 9: List.of() - unmodifiable (F)
+
+#+begin_src java
+List<String> immutableList = List.of("A", "B", "C");
+// immutableList.add("D");  // UnsupportedOperationException
+#+end_src
+
+#+BEGIN_NOTES
+Warum keine echten Literals wie in Python oder Kotlin?
+#+END_NOTES
+
+** HOPE
+
+[[file:images/hope-list.png]]
 
 ** Java 12: Switch Expressions (F)
 
@@ -899,6 +815,8 @@ https://personal.cis.strath.ac.uk/conor.mcbride/FVMcB-PhD.pdf
 
 ** Record Patterns (F)
 
+FIXME: Animal-Beispiel
+
 #+begin_src java
 record Point(int x, int y) {}
 
@@ -933,7 +851,6 @@ static void printColorOfUpperLeftPoint(Rectangle r) {
 
 ** Java 21: Unnamed Patterns, Variables (F)
 
-
 #+begin_src java
 static <T> boolean contains(T value, LinkedList<T> list) {
   return switch (list) {
@@ -963,6 +880,84 @@ switch (value) {
 
 #+BEGIN_NOTES
 #+END_NOTES
+
+** Warum hat das so lange gedauert?
+
+FIXME
+
+OO-Sichtweise
+
+** Ausblick
+
+- algebraische Datentypen / verallgemeinerte Enums
+- functional update
+- nullable types
+
+** Tupel
+
+#+begin_src haskell
+div_mod :: Integer -> Integer -> (Integer, Integer)
+div_mod a b = (a `div` b, a `mod` b)
+#+end_src
+
+** Either
+
+#+begin_src haskell
+data Either a b = Left a | Right b 
+
+data ParseDigitError
+  = NotADigit Char
+  deriving Show
+
+parseDigit :: Char -> Either ParseDigitError Int
+parseDigit c =
+  case c of
+    '0' -> Right 0
+    '1' -> Right 1
+    '2' -> Right 2
+    '3' -> Right 3
+    '4' -> Right 4
+    '5' -> Right 5
+    '6' -> Right 6
+    '7' -> Right 7
+    '8' -> Right 8
+    '9' -> Right 9
+    _ -> Left (NotADigit c)
+#+end_src
+** Nullable Types
+
+JEP draft: Null-Restricted and Nullable Types
+
+#+begin_src java
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
+** SQL, 1974
+
+#+begin_src sql
+CREATE TABLE orders
+( order_id int NOT NULL,
+  customer_id int,
+  order_date date,
+);
+#+end_src
+
+  
+** Functional Update
+
+#+begin_src haskell
+data Dillo = MkDillo { dilloLiveness :: Liveness,
+                       dilloWeight :: Weight }
+
+runOverDillo dillo = dillo { dilloLiveness = Dead }
+#+end_src
+
+
+* Threads
+
+FIXME
 
 * Was gab's noch
 
@@ -1022,86 +1017,115 @@ Java
 
 * Was hat Haskell, was ich nicht habe?
 
-** Funktionstypen
-
-#+begin_src haskell
-map :: (a -> b) -> [a] -> [b]
-#+end_src
-
-** Uniforme Generics
-
-#+begin_src haskell
-map (+1) [1,2,3,4,5,6]
-#+end_src
-
-** Tupel
-
-#+begin_src haskell
-div_mod :: Integer -> Integer -> (Integer, Integer)
-div_mod a b = (a `div` b, a `mod` b)
-#+end_src
-
-** Either
-
-#+begin_src haskell
-data Either a b = Left a | Right b 
-
-data ParseDigitError
-  = NotADigit Char
-  deriving Show
-
-parseDigit :: Char -> Either ParseDigitError Int
-parseDigit c =
-  case c of
-    '0' -> Right 0
-    '1' -> Right 1
-    '2' -> Right 2
-    '3' -> Right 3
-    '4' -> Right 4
-    '5' -> Right 5
-    '6' -> Right 6
-    '7' -> Right 7
-    '8' -> Right 8
-    '9' -> Right 9
-    _ -> Left (NotADigit c)
-#+end_src
-
-** Tail Calls
-
-#+begin_src haskell
-rev [] acc = acc
-rec (x:xs) acc = rev xs (x:acc)
-#+end_src
-
-** Tail Calls
-
-[[file:images/guy-steele-tail-calls.png]]
-
-https://www.youtube.com/watch?v=0hlBkQ5DjaY
-
-** Scheme, Tail Calls
-
-[[file:images/ltu.png]]
-
-** Guy Steele
-
-[[file:images/guy-steele-java.png]]
-
-** Typklassen/Implicits
-
-#+begin_src haskell
-class Semigroup a where
-  -- combine (combine x y) z == combine x (combine y z)
-  combine :: a -> a -> a
-
-class Semigroup a => Monoid a where
-  -- combine neutral x == combine x neutral == x
-  neutral :: a
-
-foldMonoid :: Monoid b => [b] -> b
-foldMonoid list = foldr combine neutral list
-#+end_src
 
 * Vielen Dank
 
 Fragen
+
+* Halde
+** Weitere Nahtstellen
+
+- =void=
+- Statements vs. Ausdrücke
+- =return=
+
+** Java 8: Default Methods (F)
+
+#+begin_src java
+interface Animal {
+    default void eat() {
+        System.out.println("Eating...");
+    }
+}
+class Dog implements Animal {}
+new Dog().eat();  // Eating...
+#+end_src
+
+#+BEGIN_NOTES
+Flexibilität vs. Interface-Verschmutzung.
+
+Hätte man Mixins einführen sollen?
+#+END_NOTES
+
+** Default Methods in Haskell
+
+#+begin_src haskell
+class  Eq a  where
+    (==), (/=)           :: a -> a -> Bool
+
+    x /= y               = not (x == y)
+    x == y               = not (x /= y)
+#+end_src
+
+** Java 22/24: Stream Gatherers (F)
+
+#+begin_src java
+// will contain: [[1, 2, 3], [4, 5, 6], [7]]
+List<List<Integer>> windows = Stream.of(1, 2, 3, 4, 5, 6, 7)
+  .gather(Gatherers.windowFixed(3))
+  .toList();
+System.out.println(windows);
+
+// will contain: Optional["12345"]
+Optional<String> numberString =
+  Stream.of(1, 2, 3, 4, 5)
+   .gather(Gatherers.fold(() -> "",
+     (string, number) -> string + number))
+   .findFirst();
+System.out.println(numberString);
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
+** Java 22/24: Stream Gatherers (F)
+
+#+begin_src java
+interface Gatherer<T, A, R> {
+    default Supplier<A> initializer() {
+        return defaultInitializer();
+    };
+
+    Integrator<A, T, R> integrator();
+
+    default BinaryOperator<A> combiner() {
+        return defaultCombiner();
+    }
+
+    default BiConsumer<A, Downstream<? super R>> finisher() {
+        return defaultFinisher();
+    };
+}
+#+end_src
+
+#+BEGIN_NOTES
+A gatherer is defined by four functions that work together:
+The optional initializer function provides an object that maintains private state while processing stream elements. For example, a gatherer can store the current element so that, the next time it is applied, it can compare the new element with the now-previous element and, say, emit only the larger of the two. In effect, such a gatherer transforms two input elements into one output element.
+The integrator function integrates a new element from the input stream, possibly inspecting the private state object and possibly emitting elements to the output stream. It can also terminate processing before reaching the end of the input stream; for example, a gatherer searching for the largest of a stream of integers can terminate if it detects Integer.MAX_VALUE.
+The optional combiner function can be used to evaluate the gatherer in parallel when the input stream is marked as parallel. If a gatherer is not parallel-capable then it can still be part of a parallel stream pipeline, but it is evaluated sequentially. This is useful for cases where an operation is inherently ordered in nature and thus cannot be parallelized.
+The optional finisher function is invoked when there are no more input elements to consume. This function can inspect the private state object and, possibly, emit additional output elements. For example, a gatherer searching for a specific element amongst its input elements can report failure, say by throwing an exception, when its finisher is invoked.
+#+END_NOTES
+
+
+** Java 21 Sequenced Collections (F)
+
+#+ATTR_HTML: :height 500px;
+[[file:images/sequenced_collections.jpg]]
+
+#+REVEAL: split
+
+#+begin_src java
+List<Integer> list = new ArrayList<>(List.of(1, 2, 3, 4, 5));
+List<Integer> reversed = list.reversed();
+System.out.println(reversed); // 5, 4, 3, 2, 1
+
+list.addFirst(0);
+list.addLast(6);
+
+System.out.println(list.getFirst()); // 0
+System.out.println(list.getLast()); // 6
+#+end_src
+
+#+BEGIN_NOTES
+#+END_NOTES
+
