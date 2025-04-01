@@ -4,7 +4,7 @@
   nixConfig.sandbox = false;
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/release-24.11";
     flake-utils.url = "github:numtide/flake-utils";
     revealjs = {
       url = "github:hakimel/reveal.js";
@@ -38,13 +38,15 @@
     in flake-utils.lib.eachSystem supportedSystems (system:
       let
         pkgs = import nixpkgs { inherit system; };
-        emacs = pkgs.emacs29.pkgs.withPackages (p: [
+        emacs = ((pkgs.emacs .override { withNativeCompilation = false; }) .pkgs.withPackages (p: [
           p.org-re-reveal
           p.gnuplot
           p.gnuplot-mode
           p.haskell-mode
-          p.clojure-mode
-        ]);
+          p.tuareg
+          p.sml-mode
+          p.racket-mode
+        ]));
       in {
         devShells.default = pkgs.mkShell {
           packages = [ emacs pkgs.plantuml ];
