@@ -24,9 +24,8 @@ Softwarearchitekt bei embarc
 
 ** Mike Sperber
 
-Geschäftsführer Active Group GmbH
-
-Universität Tübingen 1995-2003, Bereich Programmiersprachen und Übersetzerbau
+- Geschäftsführer Active Group GmbH
+- Universität Tübingen 1995-2003, Bereich Programmiersprachen und Übersetzerbau
 
 =@sperbsen@discuss.systems=
 
@@ -102,35 +101,60 @@ Im Vortrag werfen Falk (Java-Enthusiast) und Mike (Experte für Programmiersprac
 
 ** Inspiriert durch ...
 
-- Smalltalk
 - C++
-- ML/Haskell/OCaml/F#
+- Smalltalk
 
 #+BEGIN_NOTES
 frühe OO-Sprachen waren ungetypt: Smalltalk, C++
 #+END_NOTES
 
+** Entwicklungslinien
+
+**FP**
+LISP (1960) ->
+ML (1973) / Scheme (1975) / HOPE (1980)
+Haskell/OCaml/F# (ab 1985)
+
+**PROC**
+Algol 60 ->
+Pascal (1970) ->
+C (1972)
+
+**OOP**
+Simula 67 ->
+Smalltalk 80 ->
+C++ (1985)
 
 * Lambda
 
-** Higher Order Functions
+** Java 8: Lambdas (F)
 
 #+begin_src java
 List<String> names = List.of("Alice", "Bob", "Charlie");
+
 List<String> upperCaseNames = names.stream()
     .map(name -> {
         System.out.println("Converting: " + name);
         return name.toUpperCase();
     })
     .toList();
-System.out.println(upperCaseNames);  // [ALICE, BOB, CHARLIE]
 #+end_src
 
-** Methodenreferenzen
+** Funktionale Interfaces (F)
 
 #+begin_src java
-List<String> names = List.of("Alice", "Bob", "Charlie");
-names.forEach(System.out::println);
+Function<Integer, Integer> square = x -> x * x;
+
+void processData(List<Integer> data,
+                 Consumer<Integer> callback) {
+    data.forEach(callback);
+}
+processData(List.of(1, 2, 3),
+            value ->
+              System.out.println("Processed: " + value));
+
+Function<Integer, Function<Integer, Integer>> add =
+    x -> y -> x + y;
 #+end_src
 
 ** McCarthy, 1960
@@ -150,45 +174,14 @@ names.forEach(System.out::println);
 
 [[file:images/church-lambda.png]]
 
-** Lambda für funktionale Interfaces, als Callbacks, (F)
-
-#+begin_src java
-Function<Integer, Integer> square = x -> x * x;
-System.out.println(square.apply(5));  // 25
-
-
-void processData(List<Integer> data, Consumer<Integer> callback) {
-    data.forEach(callback);
-}
-processData(List.of(1, 2, 3), value -> System.out.println("Processed: " + value));
-
-// Currying
-Function<Integer, Function<Integer, Integer>> add = x -> y -> x + y;
-System.out.println(add.apply(5).apply(3));  // 8
-#+end_src
-
-** Methoden als Objekte
-
-#+begin_src java
-int twice(Function<Integer, Integer> f, int n) {
-   return f.apply(f.apply(n));
-}
-
-static Integer inc(Integer n) {
-    return n + 1;
-}
-
-... twice(::inc, 7) ...
-#+end_src
-
-** Streams
+** Streams (F)
 
 #+begin_src java
 List<String> names = List.of("Alice", "Bob", "Charlie");
+
 List<String> filtered = names.stream()
     .filter(name -> name.startsWith("A"))
     .collect(Collectors.toList());
-System.out.println(filtered);  // [Alice]
 #+end_src
 
 #+BEGIN_NOTES
@@ -214,18 +207,21 @@ Vergleich mit funktionalen Paradigmen.
 
 [[file:images/lisp-maplist.png]]
 
-** "Variable used in lambda expression should be final or effectively final"
+** "Variable used in lambda expression should be final or effectively final" (F)
 
 #+begin_src java
 private TimeZone
- extractCalendarTimeZoneComponent(Calendar cal, TimeZone calTz) {
+ extractCalendarTimeZoneComponent(Calendar cal,
+                                  TimeZone calTz) {
     try {
         cal.getComponents().getComponents("VTIMEZONE")
           .forEach(component -> {
             VTimeZone v = (VTimeZone) component;
             v.getTimeZoneId();
             if (calTz == null) {
-                calTz = TimeZone.getTimeZone(v.getTimeZoneId().getValue());
+                calTz =
+                    TimeZone
+                    .getTimeZone(v.getTimeZoneId().getValue());
             }
         });
     } catch (Exception e) {
@@ -235,7 +231,7 @@ private TimeZone
 }
 #+end_src
 
-** Closures
+** Closures, 1964
 
 [[file:images/landin-evaluation.png]]
 
@@ -245,90 +241,49 @@ private TimeZone
 
 ** Warum hat das so lang gedauert?
 
-**FP**
-LISP (1960) ->
-ML (1973) / Scheme (1975) / HOPE (1980) ->
-Haskell/OCaml/F# (ab 1985)
-
-**PROC**
-Algol 60 ->
-Pascal (1970) ->
-C (1972)
-
-**OOP**
-Simula 67 ->
-Smalltalk 80 ->
-C++ (1985) ->
-Java
+- braucht Generics
+- braucht Typinferenz
+- Statements vs. Ausdrücke
+- =return=
+- =void=
 
 ** Ausblick
 
-FIXME: Continuations, tail calls
+- Continuations
+- Tail Calls
 
-** Continuations
-
-FIXME
-
-** Tail Calls
-
-#+begin_src haskell
-rev [] acc = acc
-rec (x:xs) acc = rev xs (x:acc)
-#+end_src
-
-** Tail Calls
-
-[[file:images/guy-steele-tail-calls.png]]
-
-https://www.youtube.com/watch?v=0hlBkQ5DjaY
-
-** Scheme, Tail Calls
-
-[[file:images/ltu.png]]
-
-** Guy Steele
-
-[[file:images/guy-steele-java.png]]
-
-
-
-
+(später)
+  
 * Typen
 
-** Generics
-
-FIXME: besseres Beispiel
+** Java 1.5: Generics (F)
 
 #+begin_src java
-List<String> list = new ArrayList<>();
+List<String> list = new ArrayList<String>();
+
 list.add("Hello");
-// Compile-Time-Sicherheit
-String value = list.get(0);  // Kein Cast nötig
+list.add(new F()); // Typfehler
+
+String value = list.get(0);
 #+end_src
 
 #+BEGIN_NOTES
 Warum gibt es keine Generics für primitive Typen?
 
 Type Erasure: Einschränkung oder Vorteil?
-
-
 #+END_NOTES
 
 ** Generics
 
 [[file:images/gj.png]]
 
+** Generics
+
+[[file:images/gj-paper.jpg]]
+
 ** Parametrische Polymorphie
 
 [[file:images/strachey.png]]
-
-** Parametricity
-
-#+begin_src java
-interface Stream<T> {
-    <U> Stream<U> map(Function<T, U> f);
-}
-#+end_src
 
 ** Strachey, 1967
 
@@ -338,7 +293,15 @@ interface Stream<T> {
 
 [[file:images/milner.png]]
 
-** Warum kein =ArrayList<int>=?
+** Parametricity
+
+#+begin_src java
+interface Stream<T> {
+    <U> Stream<U> map(Function<T, U> f);
+}
+#+end_src
+
+** Warum kein =ArrayList<int>=? (F)
 
 #+begin_src java
 class LinkedList<A> {
@@ -355,7 +318,7 @@ class LinkedList<A> {
 }
 #+end_src
 
-** Type Erasure
+** Type Erasure (F)
 
 #+begin_src java
 class LinkedList implements Collection {
@@ -372,9 +335,11 @@ class LinkedList implements Collection {
 }
 #+end_src
 
-** Funktionstypen
+** Funktionstypen (F)
 
-FIXME: Mehr Intro
+#+begin_src java
+IntUnaryOperator inc = x -> x + 1;
+#+end_src
 
 "Cannot infer type"
 
@@ -382,14 +347,16 @@ FIXME: Mehr Intro
 var inc = (int x) -> x + 1;
 #+end_src
 
-** Generics und primitive Typen
+** Generics und primitive Typen (F)
 
 #+begin_src java
 
 interface Function<T,R> {
-    default <V> Function<T,V> andThen(Function<? super R,? extends V> after);
+    default <V> Function<T,V>
+        andThen(Function<? super R,? extends V> after);
     R apply(T t)
-    default <V> Function<V,R> compose(Function<? super V,? extends T> before)
+    default <V> Function<V,R>
+        compose(Function<? super V,? extends T> before)
     static <T> Function<T,T> identity()
 }
 
@@ -402,11 +369,13 @@ interface DoubleFunction<R> {
 
 [[file:images/java-util-function.png]]
 
-** Local variable type inference
+** Lokale Typinferenz (F)
 
 #+begin_src java
 ArrayList<Foo> list = new ArrayList<Foo>();
-    ->
+
+  ->
+
 var list = Lists.of(new Foo());
 #+end_src
 
@@ -438,12 +407,11 @@ class B extends A {}
 
 ** Ausblick
 
-FIXME
-
-- Funktionstypen
-- value types
-- Implicits
-- higher-kinded types
+- richtige Funktionstypen
+- uniforme Generics
+- Typklassen/Implicits
+- Higher-Kinded Types
+- Value Objects
 
 ** Funktionstypen in Haskell
 
@@ -467,7 +435,6 @@ double inc 7
 #+begin_src haskell
 map (+1) [1,2,3,4,5,6]
 #+end_src
-
 
 ** Typklassen/Implicits
 
@@ -522,7 +489,28 @@ class ArrayList<T> {
 }
 #+end_src
 
-** Java ?: Value Types
+** Higher-Kinded Types
+
+#+begin_src java
+class Optional<T> {
+    <U> Optional<U>
+        map(Function<? super T,? extends U> mapper);
+}
+
+interface Stream<T> {
+    <U> Stream<U>
+        map(Function<? super T,? extends U> mapper);
+}
+
+interface Functor<F<_>> {
+    <U> F<U>
+        map(F<T> container,
+            Function<? super T,? extends U> mapper);
+}
+
+#+end_src
+
+** Java ?: Value Objects (F)
 
 Project Valhalla - "Codes like a class, works like an int."
 
@@ -547,34 +535,6 @@ value class USDCurrency implements Comparable<USDCurrency> {
 }
 #+end_src
 
-#+REVEAL: split
-
-#+begin_src java
-value record Color(byte red, byte green, byte blue) {
-    public Color(int r, int g, int b) {
-        this(checkByte(r), checkByte(g), checkByte(b));
-    }
-
-    private static byte checkByte(int x) {
-        if (x < 0 || x > 255) throw new IllegalArgumentException();
-        return (byte) (x & 0xff);
-    }
-
-    public Color mix(Color that) {
-        return new Color(avg(red, that.red),
-                         avg(green, that.green),
-                         avg(blue, that.blue));
-    }
-
-    private static byte avg(byte b1, byte b2) {
-        return (byte) (((b1 & 0xff) + (b2 & 0xff)) / 2);
-    }
-}
-#+end_src
-
-#+begin_src java
-#+end_src
-
 #+BEGIN_NOTES
 #+END_NOTES
 
@@ -584,8 +544,15 @@ value record Color(byte red, byte green, byte blue) {
 ** Java 8: Optional (F)
 
 #+begin_src java
-Optional<String> name = Optional.of("Alice");
-name.ifPresent(System.out::println);  // Alice
+<A> Optional<Integer>
+    elementIndex(List<A> list, A element) {
+    
+    for (int i = 0; i < list.size(); ++i) {
+	if (list.get(i).equals(element))
+	    return Optional.of(i);
+    }
+    return Optional.empty();
+}
 #+end_src
 
 #+BEGIN_NOTES
@@ -614,7 +581,7 @@ type 'a t = 'a option =
 | Some of 'a
 #+end_src
 
-** Records
+** Records (F)
 
 #+begin_src java
 record Point(int x, int y) {}
@@ -626,7 +593,8 @@ System.out.println(p.x());
 #+REVEAL: split
 
 #+begin_src java
-public record MonetaryAmount(BigDecimal value, 	Currency currency) {}
+public record MonetaryAmount(BigDecimal value,
+                             Currency currency) {}
 #+end_src
 
 Im Bytecode:
@@ -665,7 +633,7 @@ algebraische Datentypen in Haskell.
 
 [[file:images/cardelli-wegner.png]]
 
-** Sealed Classes
+** Sealed Classes (F)
 
 #+begin_src java
 sealed interface Animal {
@@ -683,8 +651,10 @@ sealed interface Animal {
 
 #+begin_src haskell
 data Animal =
-    MkDillo { dilloLiveness :: Liveness, dilloWeight :: Weight }
-  | MkParrot { parrotSentence:: String, parrotWeight :: Weight }
+    MkDillo { dilloLiveness :: Liveness,
+              dilloWeight :: Weight }
+  | MkParrot { parrotSentence:: String,
+               parrotWeight :: Weight }
   deriving Show
 #+end_src
 
@@ -718,13 +688,16 @@ https://pmg.csail.mit.edu/ftp.lcs.mit.edu/pub/pclu/CLU/3.Documents/MIT-LCS-TR-22
 
 ** Summen und Produkte
 
-FIXME: Blog-Post
+[[file:images/sums-products.jpg]]
+
+https://funktionale-programmierung.de/2024/11/25/sums-products.html
 
 ** Java 9: List.of() - unmodifiable (F)
 
 #+begin_src java
 List<String> immutableList = List.of("A", "B", "C");
-// immutableList.add("D");  // UnsupportedOperationException
+
+immutableList.add("D");  // UnsupportedOperationException
 #+end_src
 
 #+BEGIN_NOTES
@@ -813,41 +786,18 @@ https://personal.cis.strath.ac.uk/conor.mcbride/FVMcB-PhD.pdf
 
 [[file:images/hope-pattern-matching.png]]
 
-** Record Patterns (F)
-
-FIXME: Animal-Beispiel
+** Record-Patterns (F)
 
 #+begin_src java
-record Point(int x, int y) {}
-
-void printSum(Object o) {
-    if (o instanceof Point(int x, int y)) {
-        System.out.println(x + y);
-    }
+Animal runOver() {
+    return switch (this) {
+	case Dillo(Liveness liveness, Weight weight) ->
+	    new Dillo(Liveness.DEAD, weight);
+	case Parrot(String sentence, Weight weight) ->
+	    new Parrot("", weight);
+    };
 }
 #+end_src
-
-#+REVEAL: split
-
-#+begin_src java
-record Point(int x, int y) {}
-enum Color { RED, GREEN, BLUE }
-record ColoredPoint(Point p, Color c) {}
-record Rectangle(ColoredPoint cp1, ColoredPoint cp2) {}
-
-static void printColorOfUpperLeftPoint(Rectangle r) {
-  if (r instanceof Rectangle(
-		ColoredPoint(
-			Point(int x, int y) p,
-			Color c),
-        	ColoredPoint cp2)) {
-    System.out.println(c);
-  }
-}
-#+end_src
-
-#+BEGIN_NOTES
-#+END_NOTES
 
 ** Java 21: Unnamed Patterns, Variables (F)
 
@@ -865,30 +815,30 @@ static <T> boolean contains(T value, LinkedList<T> list) {
 #+BEGIN_NOTES
 #+END_NOTES
 
-** Java 23: Primitive Types in Patterns
+** Java 23: Primitive Types in Patterns (F)
 
 #+begin_src java
-// dominierender vor dominierten Typ geht nicht (int vor byte)
 value = 10;
 switch (value) {
-    // case int _ -> System.out.println(value + " instanceof int");
-    case byte _ -> System.out.println(value + " instanceof byte");
-    case int _ -> System.out.println(value + " instanceof int");
+    case byte _ ->
+        System.out.println(value + " instanceof byte");
+    case int _ ->
+        System.out.println(value + " instanceof int");
 }
-
 #+end_src
 
 #+BEGIN_NOTES
 #+END_NOTES
 
+
 ** Warum hat das so lange gedauert?
 
-FIXME
-
-OO-Sichtweise
+- OOA/OOD gescheitert
+- "program to interfaces not implementations"
 
 ** Ausblick
 
+- Tupel, Either
 - algebraische Datentypen / verallgemeinerte Enums
 - functional update
 - nullable types
@@ -914,25 +864,10 @@ parseDigit c =
   case c of
     '0' -> Right 0
     '1' -> Right 1
-    '2' -> Right 2
-    '3' -> Right 3
-    '4' -> Right 4
-    '5' -> Right 5
-    '6' -> Right 6
-    '7' -> Right 7
-    '8' -> Right 8
+    ...
     '9' -> Right 9
     _ -> Left (NotADigit c)
 #+end_src
-** Nullable Types
-
-JEP draft: Null-Restricted and Nullable Types
-
-#+begin_src java
-#+end_src
-
-#+BEGIN_NOTES
-#+END_NOTES
 
 ** SQL, 1974
 
@@ -943,7 +878,6 @@ CREATE TABLE orders
   order_date date,
 );
 #+end_src
-
   
 ** Functional Update
 
@@ -954,42 +888,147 @@ data Dillo = MkDillo { dilloLiveness :: Liveness,
 runOverDillo dillo = dillo { dilloLiveness = Dead }
 #+end_src
 
+* Kontrolle
 
-* Threads
+** Java 21: Virtuelle Threads (F)
 
-FIXME
+#+begin_src java
+Thread.Builder builder =
+    Thread.ofVirtual().name("MyThread");
 
-* Was gab's noch
+Runnable task = () -> {
+    System.out.println("Running thread");
+};
+Thread t = builder.start(task);
 
-- Modulsystem
-- Futures
-- virtuelle Threads
+System.out.println("Thread t name: " + t.getName());
+
+t.join();
+#+end_src
+
+** Threads in Multics (1966)
+
+[[file:images/threads.jpg]]
+
+** Project Loom
+
+[[file:images/loom.jpg]]
+
+https://openjdk.org/projects/loom/
+
+** Continuations
+
+"Direct Style"
+
+#+begin_src java
+    int x = 5;
+    int y = C.inc(x);
+    int z = x * 2;
+    ...
+class C {
+    static int inc(int n) {
+        return n+1;
+    }
+}
+#+end_src
+
+** Continuations
+
+"Continuation-Passing Style (CPS)":
+
+#+begin_src java
+static Void inc(int n,
+		 Function<Integer, Void> onwards) {
+    return onwards.apply(n+1);
+}
+#+end_src
+
+#+begin_src java
+int x = 5;
+C.inc(x, y -> {
+int z = x * 2;
+... } );
+#+end_src
+
+** Composable Continuations (1988)
+
+[[file:images/prompts.jpg]]
+
+** Racket (2007)
+
+[[file:images/control-racket.jpg]]
+
+** Racket
+
+#+begin_src racket
+> (define saved-k #f)
+> (define (save-comp!)
+    (call-with-composable-continuation
+     (lambda (k) ; k is the captured continuation
+       (set! saved-k k)
+       0)))
+> (+ 1 (+ 1 (+ 1 (save-comp!))))
+3
+#+end_src
+
+** Tail Calls
+
+#+begin_src haskell
+rev [] acc = acc
+rec (x:xs) acc = rev xs (x:acc)
+#+end_src
+
+** Scheme, Tail Calls
+
+[[file:images/ltu.png]]
+
+** Tail Calls
+
+[[file:images/guy-steele-tail-calls.png]]
+
+https://www.youtube.com/watch?v=0hlBkQ5DjaY
+
+** Guy Steele
+
+[[file:images/guy-steele-java.png]]
+
+** Warum dauert das so lange?
+
+#+ATTR_HTML: :height 400px;
+[[file:images/stack.svg]]
+
+- =getStackTrace=
+- Security Manager
+- FUD
+
+** Ausblick
+
+- tail calls
+- Continuations als Objekte erster Klasse
+
+* Schlussworte
+  
+** Was gab's noch
+
+- Modulsystem (Standard ML, 1983)
+- Futures (Scheme, 1976)
+- Stream Gatherers (Haskell, 2005)
 - /structured concurrency/
 - /scoped values/
 - /string templates/
-- /statements before super/
-- /implicitly declared classes/, /instance main methods/
 - /flexible constructor bodies/
+- /implicitly declared classes/, /instance main methods/
 
-** Entwicklungslinien
+** Yesterday's Features for Today's Programmer
 
-**FP**
-LISP (1960) ->
-ML (1973) / Scheme (1975) / HOPE (1980)
-Haskell/OCaml/F# (ab 1985)
+- FP FTW
+- Warum nicht gleich Clojure oder Scala?
 
-**PROC**
-Algol 60 ->
-Pascal (1970) ->
-C (1972) ->
-Java (1995)
+** Vielen Dank
 
-**OOP**
-Simula 67 ->
-Smalltalk 80 ->
-C++ (1985) ->
-Java
+Fragen
 
+* Halde
 ** Woher
 
 | default methods        | Haskell    | FP      |  1991 |
@@ -1009,20 +1048,7 @@ Java
 | Scoped Values          | LISP       | FP      |  1959 |
 | Modulsystem            | (ML)       | (FP)    |  1990 |
 
-** Was kommt noch?
-
-- Value types
-- Generics over Primitive Types
-- Nullable Types
-
-* Was hat Haskell, was ich nicht habe?
-
-
-* Vielen Dank
-
-Fragen
-
-* Halde
+  
 ** Weitere Nahtstellen
 
 - =void=
