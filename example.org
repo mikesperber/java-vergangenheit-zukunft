@@ -438,6 +438,12 @@ map (+1) [1,2,3,4,5,6]
 
 ** Typklassen/Implicits
 
+#+begin_src java
+class Stream<T> {
+   T reduce(T identity, BinaryOperator<T> accumulator);
+}
+#+end_src
+
 #+begin_src haskell
 class Semigroup a where
   -- combine (combine x y) z == combine x (combine y z)
