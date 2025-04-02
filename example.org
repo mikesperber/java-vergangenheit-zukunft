@@ -369,7 +369,7 @@ interface DoubleFunction<R> {
 
 [[file:images/java-util-function.png]]
 
-** Lokale Typinferenz (F)
+** Typinferenz (F)
 
 #+begin_src java
 ArrayList<Foo> list = new ArrayList<Foo>();
@@ -922,6 +922,11 @@ t.join();
 
 https://openjdk.org/projects/loom/
 
+** Ausblick
+
+- tail calls
+- Continuations als Objekte erster Klasse
+
 ** Continuations
 
 "Direct Style"
@@ -1007,13 +1012,18 @@ https://www.youtube.com/watch?v=0hlBkQ5DjaY
 - Security Manager
 - FUD
 
-** Ausblick
-
-- tail calls
-- Continuations als Objekte erster Klasse
-
 * Schlussworte
-  
+
+** Woher
+
+| Generics          | ML         | FP      |  1977 |
+| Lambda            | LISP       | FP      |  1959 |
+| Streams/map       | LISP       | FP      |  1960 |
+| Typinferenz       | ML         | FP      |  1977 |
+| Records           | ALGOL W/ML | PROC/FP |  1966 |
+| Sealed Interfaces | HOPE       | FP      |  1980 |
+| Virtual Threads   | Scheme     | FP      | ~1980 |
+
 ** Was gab's noch
 
 - Modulsystem (Standard ML, 1983)
@@ -1028,31 +1038,14 @@ https://www.youtube.com/watch?v=0hlBkQ5DjaY
 ** Yesterday's Features for Today's Programmer
 
 - FP FTW
-- Warum nicht gleich Clojure oder Scala?
+- Clojure FTW
+- Scala FTW
 
 ** Vielen Dank
 
 Fragen
 
 * Halde
-** Woher
-
-| default methods        | Haskell    | FP      |  1991 |
-| Generics               | ML         | FP      |  1977 |
-| Lambda                 | LISP       | FP      |  1959 |
-| Listen/map             | LISP       | FP      |  1960 |
-| Stream Gatherers       | Haskell    | FP      |  2005 |
-| Typinferenz            | ML         | FP      |  1977 |
-
-** Woher
-
-| Records                | ALGOL W/ML | PROC/FP |  1966 |
-| Sealed Interfaces      | ML/Haskell | FP      |  1980 |
-| Futures                | Scheme     | FP      |  1976 |
-| Virtual Threads        | Scheme     | FP      | ~1980 |
-| Structured Concurrency | Erlang     | FP      | ~1990 |
-| Scoped Values          | LISP       | FP      |  1959 |
-| Modulsystem            | (ML)       | (FP)    |  1990 |
 
   
 ** Weitere Nahtstellen
